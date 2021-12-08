@@ -1,9 +1,26 @@
 import React from 'react'
+import { useRouter } from 'next/router'
 import bookApi from '../../../api/bookApi'
 import Layout from '../../../component/Layout/Layout'
 
-const Books = ({ books }) => {
-    console.log(books);
+const Books = ({ books, page, totalPage }) => {
+    const router = useRouter();
+
+    const handleClickPagination = (pageNext) => {
+        if (pageNext > totalPage || pageNext < 1) {
+            return;
+        }
+        router.push(`/admin/books?page=${pageNext}`);
+    }
+
+    const itemPagination = () => {
+        let list = [];
+        for (let i = 0; i < totalPage; i++) {
+            list.push(<li className="page-item" onClick={() => handleClickPagination(i + 1)}><a className="page-link">{i + 1}</a></li>)
+        }
+        return list;
+    }
+
     return (
         <Layout>
             <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Books</h1>
@@ -24,25 +41,50 @@ const Books = ({ books }) => {
                             <td>{book.name}</td>
                             <td>{book.author.name}</td>
                             <td>{book.remain}</td>
-                            <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                            </svg></td>
+                            <td><i class="bi bi-trash"></i></td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-        </Layout>
+            <nav aria-label="Page navigation example">
+                <ul className="pagination">
+                    <li className={page <= 1 ? 'page-item disabled' : 'page-item'}
+                        onClick={() => handleClickPagination(page - 1)}
+                    >
+                        <a className="page-link" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {
+                        itemPagination()
+                    }
+                    <li className={page >= totalPage ? 'page-item disabled' : 'page-item'}
+                        onClick={() => handleClickPagination(page + 1)}
+                    >
+                        <a className="page-link" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </Layout >
     )
 }
 
 export default Books
 
-export async function getStaticProps() {
-    const res = await bookApi.getBooks();
+export async function getServerSideProps({ query: { page = 1 } }) {
+    const start = +page === 1 ? 0 : (+page - 1) * 4;
+
+    const resBooks = await bookApi.getBooks(start);
+    const resNumberOfMovies = await bookApi.countBook();
+    const totalPage = Math.floor(resNumberOfMovies.data / 3)
+
     return {
         props: {
-            books: res.data,
-        },
-    };
+            books: resBooks.data,
+            page: +page,
+            totalPage
+        }
+    }
 }
