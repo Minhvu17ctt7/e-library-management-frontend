@@ -1,11 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import bookApi from '../../../api/bookApi'
-import Layout from '../../../component/Layout/Layout'
+import Link from 'next/link'
+import { Modal, Button } from 'react-bootstrap'
+import bookApi from 'api/bookApi'
+import Layout from 'component/Layout/Layout'
+import ModalDeleteBook from 'component/modal/DeleteBook'
+import ModalNotify from 'component/modal/NotifyModal'
 
 const Books = ({ books, page, totalPage }) => {
     const router = useRouter();
+    const [showModalDelete, setShowModalDelete] = useState(false);
+    const [showModalNotify, setShowModalNotify] = useState(false);
+    const [currentBook, setCurrentBook] = useState();
 
+    //handle open và close modal hỏi xem có muốn xóa sách hay k
+    const handleCloseModalDelete = () => setShowModalDelete(false);
+    const handleShowModalDelete = () => {
+        setShowModalDelete(true);
+    }
+
+    //hanlde open và close thông báo không thể xóa sách
+    const handleCloseModalNotify = () => setShowModalNotify(false);
+    const handleShowModalNotify = () => {
+        setShowModalNotify(true);
+    }
+
+    //handle click button delete book
+    const handleDeleteBook = (id) => {
+        setCurrentBook(id);
+        //Nếu sách chưa có ai mượn thì cho xóa, ngược lại thì thông báo không đc xóa
+        if (!checkIsDelete(id)) {
+            handleShowModalDelete();
+        } else { handleShowModalNotify(); }
+
+    }
+
+    //hanlde click item pagination
     const handleClickPagination = (pageNext) => {
         if (pageNext > totalPage || pageNext < 1) {
             return;
@@ -13,10 +43,16 @@ const Books = ({ books, page, totalPage }) => {
         router.push(`/admin/books?page=${pageNext}`);
     }
 
+    //kiểm tra xem sách có thuộc phiếu mượn nào không
+    const checkIsDelete = (id) => {
+        return books.find(book => id === book.id).transaction_details.length > 0;
+    }
+
+    //Hiện item pagination 
     const itemPagination = () => {
         let list = [];
         for (let i = 0; i < totalPage; i++) {
-            list.push(<li className="page-item" onClick={() => handleClickPagination(i + 1)}><a className="page-link">{i + 1}</a></li>)
+            list.push(<li key={i} className="page-item" onClick={() => handleClickPagination(i + 1)}><a className="page-link">{i + 1}</a></li>)
         }
         return list;
     }
@@ -24,6 +60,9 @@ const Books = ({ books, page, totalPage }) => {
     return (
         <Layout>
             <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Books</h1>
+            <Link href="/admin/books/create">
+                <Button className="btn btn-primary">Create book</Button>
+            </Link>
             <table className="table">
                 <thead className="thead-light">
                     <tr>
@@ -41,7 +80,7 @@ const Books = ({ books, page, totalPage }) => {
                             <td>{book.name}</td>
                             <td>{book.author.name}</td>
                             <td>{book.remain}</td>
-                            <td><i class="bi bi-trash"></i></td>
+                            <td><i className="bi bi-trash" onClick={() => handleDeleteBook(book.id)}></i></td>
                         </tr>
                     ))}
                 </tbody>
@@ -67,6 +106,20 @@ const Books = ({ books, page, totalPage }) => {
                     </li>
                 </ul>
             </nav>
+            <ModalDeleteBook
+                showModalDelete={showModalDelete}
+                handleCloseModalDelete={handleCloseModalDelete}
+                idBook={currentBook}
+            />
+            <ModalNotify
+                showModal={showModalNotify}
+                closeModal={handleCloseModalNotify}
+                content={{
+                    title: "Can't delete book",
+                    message: `Book id: ${currentBook} has transaction.
+                     Please delete transaction before`
+                }}
+            />
         </Layout >
     )
 }
@@ -74,15 +127,16 @@ const Books = ({ books, page, totalPage }) => {
 export default Books
 
 export async function getServerSideProps({ query: { page = 1 } }) {
+    //Lấy sách theo page, vì strapi version 3. chưa hỗ trợ pagination nên phải làm theo cách start, limit
     const start = +page === 1 ? 0 : (+page - 1) * 4;
-
-    const resBooks = await bookApi.getBooks(start);
-    const resNumberOfMovies = await bookApi.countBook();
-    const totalPage = Math.floor(resNumberOfMovies.data / 3)
+    const books = await bookApi.getBooks(start);
+    //Tính tổng page
+    const numberOfMovies = await bookApi.countBook();
+    const totalPage = Math.floor(numberOfMovies / 3)
 
     return {
         props: {
-            books: resBooks.data,
+            books: books,
             page: +page,
             totalPage
         }
