@@ -5,6 +5,7 @@ module.exports = {
     config.resolve.alias['component'] = path.join(__dirname, 'component')
     config.resolve.alias['api'] = path.join(__dirname, 'api')
     config.resolve.alias['public'] = path.join(__dirname, 'public')
+    config.resolve.alias['styles'] = path.join(__dirname, 'styles')
 
     return config
   }

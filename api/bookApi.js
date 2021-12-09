@@ -5,6 +5,10 @@ const bookApi = {
         const url = `/books?_limit=4&_start=${start}`;
         return axiosClient.get(url);
     },
+    getBookById: (id) => {
+        const url = `/books/${id}`;
+        return axiosClient.get(url);
+    },
     getCategories: () => {
         return axiosClient.get("/categories");
     },
@@ -24,6 +28,14 @@ const bookApi = {
             formData.append('files.photo', file);
         }
         return axiosClient.post('/books', formData);
+    },
+    updateBook: (data, file, id) => {
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(data));
+        if (file) {
+            formData.append('files.photo', file);
+        }
+        return axiosClient.put(`/books/${id}`, formData);
     },
     deleteBook: (id) => {
         const url = `/books/${id}`;

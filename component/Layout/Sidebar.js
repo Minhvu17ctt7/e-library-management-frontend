@@ -1,42 +1,46 @@
 import React from 'react'
 import Link from 'next/link'
-import styles from "../../styles/Header.module.css"
+import { useRouter } from 'next/router'
+import styles from "styles/Header.module.css"
 
 const Sidebar = () => {
+    const router = useRouter();
+    const routerPath = router.pathname.split('/')[2];
+    console.log("routerPath...", routerPath)
     return (
-        <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style={{ width: "100%", height: "100%", }}>
+        <div className="d-flex flex-column flex-shrink-0 p-3 bg-light" style={{ width: "100%", height: "100%", }}>
             {/* <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
                 <span class="fs-4">Sidebar</span>
             </a>
             <hr /> */}
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <Link href="/" exact>
-                        <a class="nav-link link-dark active">
+                    <Link href="/admin" exact>
+                        <a className={!routerPath ? "nav-link link-dark active" : "nav-link link-dark"}>
                             Home
                         </a>
                     </Link>
                 </li>
                 <li>
                     <Link href="/admin/books">
-                        <a class="nav-link link-dark">
+                        <a className={routerPath === "books" ? "nav-link link-dark active" : "nav-link link-dark"}>
                             Books
                         </a>
                     </Link>
                 </li>
                 <li>
-                    <a class="nav-link link-dark">
+                    <a className="nav-link link-dark">
                         Member
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link link-dark">
-                        Products
+                    <a className="nav-link link-dark">
+                        Transaction
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link link-dark">
-                        Customers
+                    <a className="nav-link link-dark">
+                        Setting
                     </a>
                 </li>
             </ul>

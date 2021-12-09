@@ -75,12 +75,17 @@ const Books = ({ books, page, totalPage }) => {
                 </thead>
                 <tbody>
                     {books.map(book => (
-                        <tr key={book.id}>
+                        <tr key={book.id} onClick={() => router.push(`/admin/books/${book.id}`)}>
                             <th scope="row">{book.id}</th>
                             <td>{book.name}</td>
                             <td>{book.author.name}</td>
                             <td>{book.remain}</td>
-                            <td><i className="bi bi-trash" onClick={() => handleDeleteBook(book.id)}></i></td>
+                            <td onClick={(e) => e.stopPropagation()}>
+                                <Link href={`/admin/books/update/${book.id}`}>
+                                    <i className="bi bi-pencil-square"></i>
+                                </Link>
+                                <i className="bi bi-trash" onClick={() => handleDeleteBook(book.id)}></i></td>
+
                         </tr>
                     ))}
                 </tbody>
