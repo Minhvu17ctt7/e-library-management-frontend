@@ -1,26 +1,26 @@
-import bookApi from 'api/bookApi';
-import FormBook from 'component/book/formBook';
+import React from 'react'
+import FormBook from 'component/book/formBook'
+import bookApi from 'api/bookApi'
 
-const CreateBook = (props) => {
-
+const UpdateBook = (props) => {
     return (
         <FormBook {...props} />
     )
 }
 
-export default CreateBook
+export default UpdateBook
 
-export async function getStaticProps() {
-
-    //Mấy cái này lấy để show cho user chọn
+export async function getServerSideProps({ params }) {
+    const book = await bookApi.getBookById(params.id);
     const categories = await bookApi.getCategories();
     const authors = await bookApi.getAuthors();
     const providers = await bookApi.getProviders();
     return {
         props: {
+            book,
             categories,
             authors,
             providers
-        },
+        }
     }
 }

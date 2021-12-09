@@ -1,9 +1,9 @@
 import Head from "next/head";
 import Image from "next/image";
-import Footer from "../component/Layout/Footer";
-import Header from "../component/Layout/Header";
-import Layout from "../component/Layout/Layout";
-import styles from "../styles/Home.module.css";
+import Footer from "component/Layout/Footer";
+import Header from "component/Layout/Header";
+import Layout from "component/Layout/Layout";
+import styles from "styles/Home.module.css";
 import { Card, Container, Form, Button } from "react-bootstrap"
 
 export default function Home() {

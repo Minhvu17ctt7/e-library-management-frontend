@@ -18,7 +18,7 @@ const Layout = (props) => {
                     <nav className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse p-0">
                         <Sidebar />
                     </nav>
-                    <main className="col-md-9 ms-sm-auto col-lg-10">
+                    <main className="col-md-9 ms-sm-auto col-lg-10 p-5">
                         {props.children}
                     </main>
                 </div>

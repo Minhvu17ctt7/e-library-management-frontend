@@ -2,7 +2,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 // Set up default config for http requests here
 
-const BASE_URL = process.env.NEXT_APP_BASE_URL || 'http://localhost:1337';
+export const BASE_URL = process.env.NEXT_APP_BASE_URL || 'http://localhost:1337';
 
 const axiosClient = axios.create({
 	baseURL: BASE_URL,
@@ -20,7 +20,7 @@ axiosClient.interceptors.request.use(
 );
 axiosClient.interceptors.response.use(
 	(response) => {
-		return response;
+		return response.data;
 	},
 	(error) => {
 		// Handle errors
