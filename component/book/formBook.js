@@ -6,7 +6,6 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 
 const FormBook = ({ authors, categories, providers, book }) => {
-    console.log('book', book);
     const history = useRouter();
     //Lưu src để hiện image preview khi chọn image
     const [srcImage, setSrcImage] = useState();
@@ -31,7 +30,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
             } else {
                 await bookApi.createBook(values, fileImage);
             }
-            history.replace("/admin/books");
+            history.replace("/manage/books");
         },
     });
 
