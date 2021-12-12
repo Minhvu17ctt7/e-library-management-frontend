@@ -2,7 +2,7 @@ import axiosClient from "./axiosClients";
 
 const bookApi = {
     getBooks: (start) => {
-        const url = `/books?_limit=4&_start=${start}`;
+        const url = `/books?_limit=8&_start=${start}`;
         return axiosClient.get(url);
     },
     getBookById: (id) => {

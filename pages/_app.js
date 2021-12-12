@@ -17,9 +17,9 @@ function redirectUser(ctx, location) {
   }
 }
 
-MyApp.getInitialProps = async ({ Component, ctx }) => {
+export async function getServerSideProps({ Component, ctx }) {
   let pageProps = {}
-  const isLoggedIn = Cookies.get("isLoggedIn");
+  const isLoggedIn = Cookies.get("isLoggedIn") === 'true';
 
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx)
