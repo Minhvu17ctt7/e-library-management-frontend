@@ -40,7 +40,7 @@ const Books = ({ books, page, totalPage }) => {
         if (pageNext > totalPage || pageNext < 1) {
             return;
         }
-        router.push(`/admin/books?page=${pageNext}`);
+        router.push(`/manage/books?page=${pageNext}`);
     }
 
     //kiểm tra xem sách có thuộc phiếu mượn nào không
@@ -60,7 +60,7 @@ const Books = ({ books, page, totalPage }) => {
     return (
         <Layout>
             <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Books</h1>
-            <Link href="/admin/books/create">
+            <Link href="/manage/books/create">
                 <Button className="btn btn-primary">Create book</Button>
             </Link>
             <table className="table">
@@ -75,13 +75,13 @@ const Books = ({ books, page, totalPage }) => {
                 </thead>
                 <tbody>
                     {books.map(book => (
-                        <tr key={book.id} onClick={() => router.push(`/admin/books/${book.id}`)}>
+                        <tr key={book.id} onClick={() => router.push(`/manage/books/${book.id}`)}>
                             <th scope="row">{book.id}</th>
                             <td>{book.name}</td>
                             <td>{book.author.name}</td>
                             <td>{book.remain}</td>
                             <td onClick={(e) => e.stopPropagation()}>
-                                <Link href={`/admin/books/update/${book.id}`}>
+                                <Link href={`/manage/books/update/${book.id}`}>
                                     <i className="bi bi-pencil-square"></i>
                                 </Link>
                                 <i className="bi bi-trash" onClick={() => handleDeleteBook(book.id)}></i></td>
