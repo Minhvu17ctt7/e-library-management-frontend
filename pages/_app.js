@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "styles/globals.css"
 import Router from 'next/router'
-import Cookies from 'js-cookie';
+import { parseCookies } from 'nookies'
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />
@@ -17,19 +17,22 @@ function redirectUser(ctx, location) {
   }
 }
 
-export async function getServerSideProps({ Component, ctx }) {
+MyApp.getInitialProps = async ({ Component, ctx }) => {
   let pageProps = {}
-  const isLoggedIn = Cookies.get("isLoggedIn") === 'true';
+  const jwt = parseCookies(ctx).jwt
 
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx)
   }
 
-
-  if (!isLoggedIn) {
+  //nếu chưa đăng nhập thì điều hướng đến trang đăng nhập
+  //đến đã đăng nhập muốn vào trang login thì phải nhấn button logout, nên điều hướng đến manage
+  if (!jwt) {
     if (ctx.pathname.includes("/manage")) {
       redirectUser(ctx, "/login");
     }
+  } else if (ctx.pathname === "/login") {
+    redirectUser(ctx, "/manage")
   }
 
   return {

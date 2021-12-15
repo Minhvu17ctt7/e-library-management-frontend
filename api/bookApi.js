@@ -1,45 +1,48 @@
 import axiosClient from "./axiosClients";
+import Cookies from 'js-cookie'
+import axios from 'axios';
 
 const bookApi = {
-    getBooks: (start) => {
+    getBooks: async (start, jwt) => {
         const url = `/books?_limit=8&_start=${start}`;
-        return axiosClient.get(url);
+        return axiosClient.get(url, { headers: { "Authorization": `Bearer ${jwt}` } });
     },
-    getBookById: (id) => {
+    getBookById: (id, jwt) => {
         const url = `/books/${id}`;
-        return axiosClient.get(url);
+        return axiosClient.get(url, { headers: { "Authorization": `Bearer ${jwt}` } });
     },
-    getCategories: () => {
-        return axiosClient.get("/categories");
+    getCategories: (jwt) => {
+        return axiosClient.get("/categories", { headers: { "Authorization": `Bearer ${jwt}` } });
     },
-    getAuthors: () => {
-        return axiosClient.get("/authors");
+    getAuthors: (jwt) => {
+        return axiosClient.get("/authors", { headers: { "Authorization": `Bearer ${jwt}` } });
     },
-    getProviders: () => {
-        return axiosClient.get("/providers");
+    getProviders: (jwt) => {
+        return axiosClient.get("/providers", { headers: { "Authorization": `Bearer ${jwt}` } });
     },
-    countBook: () => {
-        return axiosClient.get('/books/count');
+    countBook: (jwt) => {
+        return axiosClient.get('/books/count', { headers: { "Authorization": `Bearer ${jwt}` } });
     },
-    createBook: (data, file) => {
+    createBook: (data, file, jwt) => {
+        console.log("jwt", jwt);
         const formData = new FormData();
         formData.append('data', JSON.stringify(data));
         if (file) {
             formData.append('files.photo', file);
         }
-        return axiosClient.post('/books', formData);
+        return axiosClient.post('/books', formData, { headers: { "Authorization": `Bearer ${jwt}` } });
     },
-    updateBook: (data, file, id) => {
+    updateBook: (data, file, id, jwt) => {
         const formData = new FormData();
         formData.append('data', JSON.stringify(data));
         if (file) {
             formData.append('files.photo', file);
         }
-        return axiosClient.put(`/books/${id}`, formData);
+        return axiosClient.put(`/books/${id}`, formData, { headers: { "Authorization": `Bearer ${jwt}` } });
     },
-    deleteBook: (id) => {
+    deleteBook: (id, jwt) => {
         const url = `/books/${id}`;
-        return axiosClient.delete(url);
+        return axiosClient.delete(url, { headers: { "Authorization": `Bearer ${jwt}` } });
     }
 }
 

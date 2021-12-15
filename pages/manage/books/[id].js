@@ -3,6 +3,7 @@ import Layout from 'component/Layout/Layout'
 import { Row, Col } from 'react-bootstrap'
 import bookApi from 'api/bookApi'
 import { BASE_URL } from 'api/axiosClients'
+import nookies from 'nookies'
 
 const BookDetail = ({ book }) => {
     return (
@@ -43,8 +44,10 @@ const BookDetail = ({ book }) => {
 
 export default BookDetail
 
-export async function getServerSideProps({ params }) {
-    const book = await bookApi.getBookById(params.id);
+export async function getServerSideProps(context) {
+    const jwt = nookies.get(context).jwt;
+    const id = context.params.id;
+    const book = await bookApi.getBookById(id, jwt);
     return {
         props: {
             book

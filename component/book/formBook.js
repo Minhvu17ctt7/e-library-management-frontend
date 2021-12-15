@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import bookApi from 'api/bookApi'
 import Layout from 'component/Layout/Layout'
 import { Form, Row, Col, Button } from 'react-bootstrap'
+import { BASE_URL } from 'api/axiosClients'
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie'
 
 const FormBook = ({ authors, categories, providers, book }) => {
     const history = useRouter();
@@ -25,10 +27,11 @@ const FormBook = ({ authors, categories, providers, book }) => {
             category: book?.category.id ? book?.category.id : null,
         },
         onSubmit: async (values) => {
+            const jwt = Cookies.get("jwt");
             if (book) {
-                await bookApi.updateBook(values, fileImage, book.id);
+                await bookApi.updateBook(values, fileImage, book.id, jwt);
             } else {
-                await bookApi.createBook(values, fileImage);
+                await bookApi.createBook(values, fileImage, jwt);
             }
             history.replace("/manage/books");
         },
@@ -49,7 +52,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
 
     const srcImagePhoto = () => {
         if (srcImage) return srcImage;
-        if (book?.photo) return `http://localhost:1337${book.photo.url}`;
+        if (book?.photo) return `${BASE_URL}${book.photo.url}`;
         return "/image/thumbnail.png"
     }
 

@@ -1,10 +1,13 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
+import bookApi from 'api/bookApi';
+import { parseCookies } from 'nookies'
 
 const DeleteBook = ({ showModalDelete, handleCloseModalDelete, idBook }) => {
     const handleOnDelete = async () => {
-        await bookApi.deleteBook(idBook);
-        setShowModalDelete(false)
+        const jwt = parseCookies().jwt;
+        await bookApi.deleteBook(idBook, jwt);
+        handleCloseModalDelete(false)
     }
     return (
         <Modal show={showModalDelete} onHide={handleCloseModalDelete}>

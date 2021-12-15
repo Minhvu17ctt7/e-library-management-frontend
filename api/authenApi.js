@@ -1,4 +1,4 @@
-import axios from './axiosClientNoToken';
+import axios from './axiosClients';
 
 const authenApi = {
 	login: (body) => {
