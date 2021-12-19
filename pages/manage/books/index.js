@@ -6,6 +6,7 @@ import bookApi from 'api/bookApi'
 import Layout from 'component/Layout/Layout'
 import ModalDeleteBook from 'component/modal/DeleteBook'
 import ModalNotify from 'component/modal/NotifyModal'
+import { BASE_URL } from 'api/axiosClients'
 import nookies from 'nookies'
 
 const Books = () => {
@@ -82,10 +83,11 @@ const Books = () => {
             <Link href="/manage/books/create">
                 <Button className="btn btn-primary">Create book</Button>
             </Link>
-            {books && (<table className="table">
-                <thead className="thead-light">
+            {books && (<table class="table align-middle">
+                <thead>
                     <tr>
                         <th scope="col">ID</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Name</th>
                         <th scope="col">Author</th>
                         <th scope="col">Remain</th>
@@ -96,14 +98,22 @@ const Books = () => {
                     {books.map(book => (
                         <tr key={book.id} onClick={() => router.push(`/manage/books/${book.id}`)}>
                             <th scope="row">{book.id}</th>
+                            <th scope="row">
+                                <img src={book.photo ? `${BASE_URL}${book.photo.url}` : "/image/thumbnail.png"} className="img-thumbnail rounded-3"
+                                    style={{ width: "100px" }} alt="thumbnail" />
+                            </th>
                             <td>{book.name}</td>
                             <td>{book.author.name}</td>
                             <td>{book.remain}</td>
                             <td onClick={(e) => e.stopPropagation()}>
                                 <Link href={`/manage/books/update/${book.id}`}>
-                                    <i className="bi bi-pencil-square"></i>
+                                    <button type="button" className="btn btn-sm px-3 btn-warning">
+                                        <i className="bi bi-pencil-square"></i>
+                                    </button>
                                 </Link>
-                                <i className="bi bi-trash" onClick={() => handleDeleteBook(book.id)}></i></td>
+                                <button type="button" class="btn btn-danger btn-sm px-3 m-2" onClick={() => handleDeleteBook(book.id)}>
+                                    <i className="bi bi-trash"></i>
+                                </button></td>
 
                         </tr>
                     ))}

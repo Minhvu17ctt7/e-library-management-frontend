@@ -1,10 +1,30 @@
+import { useState, useEffect } from "react";
 import Footer from "component/Layout/Footer";
 import Header from "component/Layout/Header";
 import { Button, Card, Form } from "react-bootstrap";
 import bookApi from "api/bookApi";
+import { useRouter } from "next/router";
+import { BASE_URL } from "api/axiosClients";
 
 export default function Search() {
-    console.log(books)
+    const router = useRouter();
+    const [books, setBooks] = useState();
+    const [page, setPage] = useState();
+    const [totalPage, setTotalPage] = useState();
+    useEffect(() => {
+        (async () => {
+            const page = router.query.id || 1;
+            setPage(page)
+            //Lấy sách theo page, vì strapi version 3. chưa hỗ trợ pagination nên phải làm theo cách start, limit
+            const start = +page === 1 ? 0 : (+page - 1) * 4;
+            const books = await bookApi.getBooks(start);
+            setBooks(books)
+            //Tính tổng page
+            const numberOfMovies = await bookApi.countBook();
+            const totalPage = Math.floor(numberOfMovies / 3)
+            setTotalPage(totalPage)
+        })()
+    }, [])
     return (
         <>
             <Header />
@@ -15,75 +35,33 @@ export default function Search() {
                         <Form.Control type="text" placeholder="Nhập tên sách" required />
                     </Form.Group>
                 </Form>
-                <div class="row row-cols-1 row-cols-md-3">
-                    {/* {
-                        <div class="col mb-4">
-                            <div class="card mb-3">
-                                <div class="row no-gutters">
-                                    <div class="col-md-4">
-                                        <img src="..." alt="..." />
+                {books && <section style={{ backgroundColor: "#eee" }}>
+                    <div className="row">
+                        {books.map(book => (
+                            <div className="col-lg-3 col-md-3 mb-3">
+                                <div className="card">
+                                    <div
+                                        className="bg-image hover-zoom ripple ripple-surface ripple-surface-light text-center"
+                                        data-mdb-ripple-color="light"
+                                    >
+                                        <img
+                                            src={book.photo ? `${BASE_URL}${book.photo.url}` : "/image/thumbnail.png"}
+                                            className="w-50"
+                                        />
                                     </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Card title</h5>
-                                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    } */}
-                    {/* <div class="col mb-4">
-                        <div class="card mb-3">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="..." alt="..." />
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Card title</h5>
-                                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                    <div className="card-body">
+                                        <a href="" className="text-reset">
+                                            <h5 className="card-title mb-3">{book.name}</h5>
+                                        </a>
+                                        <a href="" className="text-reset">
+                                            <p>Category</p>
+                                        </a>
+                                        <h6 className="mb-3">$61.99</h6>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div>))}
                     </div>
-                    <div class="col mb-4">
-                        <div class="card mb-3">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="..." alt="..." />
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Card title</h5>
-                                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-4">
-                        <div class="card mb-3">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="..." alt="..." />
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Card title</h5>
-                                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                         */}
-                </div>
+                </section>}
             </main>
             <Footer />
         </>

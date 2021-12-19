@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Card, Container, Form, Button } from "react-bootstrap"
+import { Card, Container, Form, Button, Spinner } from "react-bootstrap"
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import authenApi from "api/authenApi";
 import Cookies from "js-cookie";
-import nookies from 'nookies'
 
-const Login = () => {
+const login = () => {
   const [error, setError] = useState();
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const formik = useFormik({
     initialValues: {
@@ -16,62 +16,66 @@ const Login = () => {
     },
     onSubmit: async (values) => {
       try {
+        setLoading(true);
         const res = await authenApi.login({ identifier: values.identifier, password: values.password });
+        setLoading(false)
         Cookies.set("jwt", res.jwt);
         Cookies.set("user", JSON.stringify(res.user));
         Cookies.set("isLoggedIn", true)
-        // nookies.set(null, 'jwt', res.jwt, {
-        //   maxAge: 30 * 24 * 60 * 60,
-        // })
-        // nookies.set(null, 'isLoggedIn', true, {
-        //   maxAge: 30 * 24 * 60 * 60,
-        // })
-
-        // nookies.set(null, "user", JSON.stringify(res.user))
-        router.push("/manage")
-
+        router.replace("/manage")
       } catch (error) {
+        setLoading(false);
         setError(true);
       }
     },
   });
-
-
   return (
-    <Container style={{ minHeight: "100vh" }} className="d-flex">
-      <Card className="m-auto" style={{ width: "25rem" }}>
-        <Card.Header>Login</Card.Header>
-        <Card.Body>
-          <Form onSubmit={formik.handleSubmit}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Enter username" name="identifier"
-                onChange={formik.handleChange}
-                value={formik.values.identifier}
-                required />
-            </Form.Group>
+    <section className="vh-100">
+      <div className="container py-5 h-100">
+        <div className="row d-flex align-items-center justify-content-center h-100">
+          <div className="col-md-8 col-lg-7 col-xl-6">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" className="img-fluid" alt="Phone image" />
+          </div>
+          <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+            <h1 className="text-center mb-5">Login</h1>
+            <form onSubmit={formik.handleSubmit}>
+              {/* <!-- Email input --> */}
+              <div className="form-outline mb-4">
+                <label className="form-label" for="form1Example13">Username</label>
+                <input type="text" id="form1Example13" className="form-control form-control-lg"
+                  name="identifier"
+                  onChange={formik.handleChange}
+                  value={formik.values.identifier}
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password"
-                name="password"
-                onChange={formik.handleChange}
-                value={formik.values.password}
-              />
-            </Form.Group>
-            {error && <p className="text-danger">Has some error</p>}
-            {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Remember me" />
-            </Form.Group> */}
-            <Button variant="primary" type="submit">
-              Login
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
-    </Container>
-  );
-};
+                />
+              </div>
 
-export default Login;
+              {/* <!-- Password input --> */}
+              <div className="form-outline mb-4">
+                <label className="form-label" for="form1Example23">Password</label>
+                <input type="password" id="form1Example23" className="form-control form-control-lg"
+                  name="password"
+                  onChange={formik.handleChange}
+                  value={formik.values.password}
+                />
+              </div>
+              {error && <p className="text-danger text-center">Username or password invalid</p>}
+              {/* <!-- Submit button --> */}
+              <div className="text-center">
+                <button type="submit" className="btn btn-primary btn-lg btn-block w-50 m-auto" disabled={loading} >{loading ? <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                /> : "Sign in"}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
 
+export default login
