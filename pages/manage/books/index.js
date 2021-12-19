@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import { Modal, Button } from 'react-bootstrap'
+import { BASE_URL } from 'api/axiosClients'
 import bookApi from 'api/bookApi'
 import Layout from 'component/Layout/Layout'
+import Loading from 'component/Loading/Loading'
 import ModalDeleteBook from 'component/modal/DeleteBook'
 import ModalNotify from 'component/modal/NotifyModal'
-import nookies from 'nookies'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { Fragment, useEffect, useState } from 'react'
+import { Button } from 'react-bootstrap'
 
 const Books = () => {
     const router = useRouter();
@@ -14,23 +15,29 @@ const Books = () => {
     const [showModalNotify, setShowModalNotify] = useState(false);
     const [currentBook, setCurrentBook] = useState();
     const [books, setBooks] = useState();
-    const [page, setPage] = useState();
+    const page = +router.query.page || 1;
     const [totalPage, setTotalPage] = useState();
+    const [loading, setLoading] = useState(false)
+    const [hasOnChange, setHasOnChange] = useState(false);
+    const start = page === 1 ? 0 : (page - 1) * 4;
+
+    const selectDocumentHandler = () => {
+        setHasOnChange(preState => !preState);
+    };
 
     useEffect(() => {
         (async () => {
-            const page = router.query.id || 1;
-            setPage(page)
+            setLoading(true);
             //Lấy sách theo page, vì strapi version 3. chưa hỗ trợ pagination nên phải làm theo cách start, limit
-            const start = +page === 1 ? 0 : (+page - 1) * 4;
-            const books = await bookApi.getBooks(start);
+            const books = await bookApi.getBooks({ "_start": start });
             setBooks(books)
             //Tính tổng page
-            const numberOfMovies = await bookApi.countBook();
-            const totalPage = Math.floor(numberOfMovies / 3)
+            const numberOfBooks = await bookApi.countBook();
+            const totalPage = Math.ceil(numberOfBooks / 4)
             setTotalPage(totalPage)
+            setLoading(false)
         })()
-    }, [])
+    }, [page, hasOnChange])
 
     //handle open và close modal hỏi xem có muốn xóa sách hay k
     const handleCloseModalDelete = () => setShowModalDelete(false);
@@ -69,82 +76,96 @@ const Books = () => {
 
     //Hiện item pagination 
     const itemPagination = () => {
+
         let list = [];
         for (let i = 0; i < totalPage; i++) {
-            list.push(<li key={i} className="page-item" onClick={() => handleClickPagination(i + 1)}><a className="page-link">{i + 1}</a></li>)
+            list.push(<li key={i} className={page === (i + 1) ? "page-item active" : "page-item"} onClick={() => handleClickPagination(i + 1)}><a className="page-link">{i + 1}</a></li>)
         }
         return list;
     }
 
     return (
-        <Layout>
-            <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Books</h1>
-            <Link href="/manage/books/create">
-                <Button className="btn btn-primary">Create book</Button>
-            </Link>
-            {books && (<table className="table">
-                <thead className="thead-light">
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Author</th>
-                        <th scope="col">Remain</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {books.map(book => (
-                        <tr key={book.id} onClick={() => router.push(`/manage/books/${book.id}`)}>
-                            <th scope="row">{book.id}</th>
-                            <td>{book.name}</td>
-                            <td>{book.author.name}</td>
-                            <td>{book.remain}</td>
-                            <td onClick={(e) => e.stopPropagation()}>
-                                <Link href={`/manage/books/update/${book.id}`}>
-                                    <i className="bi bi-pencil-square"></i>
-                                </Link>
-                                <i className="bi bi-trash" onClick={() => handleDeleteBook(book.id)}></i></td>
-
+        <Fragment>
+            {loading && <Loading />}
+            <Layout>
+                <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Books</h1>
+                <Link href="/manage/books/create">
+                    <Button className="btn btn-primary">Create book</Button>
+                </Link>
+                {books && (<table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Remain</th>
+                            <th></th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>)}
-            {books && (<nav aria-label="Page navigation example">
-                <ul className="pagination">
-                    <li className={page <= 1 ? 'page-item disabled' : 'page-item'}
-                        onClick={() => handleClickPagination(page - 1)}
-                    >
-                        <a className="page-link" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    {
-                        itemPagination()
-                    }
-                    <li className={page >= totalPage ? 'page-item disabled' : 'page-item'}
-                        onClick={() => handleClickPagination(page + 1)}
-                    >
-                        <a className="page-link" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>)}
-            <ModalDeleteBook
-                showModalDelete={showModalDelete}
-                handleCloseModalDelete={handleCloseModalDelete}
-                idBook={currentBook}
-            />
-            <ModalNotify
-                showModal={showModalNotify}
-                closeModal={handleCloseModalNotify}
-                content={{
-                    title: "Can't delete book",
-                    message: `Book id: ${currentBook} has transaction.
+                    </thead>
+                    <tbody>
+                        {books.map(book => (
+                            <tr key={book.id} onClick={() => router.push(`/manage/books/${book.id}`)}>
+                                <th scope="row">{book.id}</th>
+                                <th scope="row">
+                                    <img src={book.photo ? `${BASE_URL}${book.photo.url}` : "/image/thumbnail.png"} className="img-thumbnail rounded-3"
+                                        style={{ width: "100px" }} alt="thumbnail" />
+                                </th>
+                                <td>{book.name}</td>
+                                <td>{book.author.name}</td>
+                                <td>{book.remain}</td>
+                                <td onClick={(e) => e.stopPropagation()}>
+                                    <Link href={`/manage/books/update/${book.id}`}>
+                                        <button type="button" className="btn btn-sm px-3 btn-warning">
+                                            <i className="bi bi-pencil-square"></i>
+                                        </button>
+                                    </Link>
+                                    <button type="button" class="btn btn-danger btn-sm px-3 m-2" onClick={() => handleDeleteBook(book.id)}>
+                                        <i className="bi bi-trash"></i>
+                                    </button></td>
+
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>)}
+                {books && (<nav aria-label="Page navigation example">
+                    <ul className="pagination">
+                        <li className={page <= 1 ? 'page-item disabled' : 'page-item'}
+                            onClick={() => handleClickPagination(page - 1)}
+                        >
+                            <a className="page-link" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {
+                            itemPagination()
+                        }
+                        <li className={page >= totalPage ? 'page-item disabled' : 'page-item'}
+                            onClick={() => handleClickPagination(page + 1)}
+                        >
+                            <a className="page-link" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>)}
+                <ModalDeleteBook
+                    showModalDelete={showModalDelete}
+                    handleCloseModalDelete={handleCloseModalDelete}
+                    idBook={currentBook}
+                    selectDocumentHandler={selectDocumentHandler}
+                />
+                <ModalNotify
+                    showModal={showModalNotify}
+                    closeModal={handleCloseModalNotify}
+                    content={{
+                        title: "Can't delete book",
+                        message: `Book id: ${currentBook} has transaction.
                      Please delete transaction before`
-                }}
-            />
-        </Layout >
+                    }}
+                />
+            </Layout >
+        </Fragment>
     )
 }
 

@@ -12,8 +12,34 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main style={{ height: '85vh'}} className="d-flex ">
-        <Carousel className="w-100">
+      <main style={{ height: '85vh' }} className="d-flex ">
+        <div
+          id="intro-example"
+          class="text-center img-fluid w-100"
+          style={{ backgroundImage: "url('/image/background2.jpg')" }}
+        >
+          <div class="mask h-100" style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}>
+            <div class="d-flex justify-content-center align-items-center h-100">
+              <div class="text-white">
+                <h1 class="mb-3">E-library-management</h1>
+                <h5 class="mb-4">Giải pháp quản lý thư viện hiệu quả</h5>
+                <Link href="/login">
+                  <button
+                    class="btn btn-outline-light btn-lg m-2"
+                    rel="nofollow"
+                  >Login</button>
+                </Link>
+                <Link href="/search">
+                  <button
+                    class="btn btn-outline-light btn-lg m-2"
+                    rel="nofollow"
+                  >Search book</button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <Carousel className="w-100">
           <Carousel.Item>
             <img
               style={{ width: '100%', height: '85vh' }}
@@ -63,7 +89,7 @@ export default function Home() {
               </div>
             </Carousel.Caption>
           </Carousel.Item>
-        </Carousel>
+        </Carousel> */}
       </main>
       <Footer />
     </>

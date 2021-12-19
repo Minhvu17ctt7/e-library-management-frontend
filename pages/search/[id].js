@@ -1,17 +1,18 @@
 import { BASE_URL } from 'api/axiosClients'
 import bookApi from 'api/bookApi'
-import Layout from 'component/Layout/Layout'
-import Loading from 'component/Loading/Loading'
+import Footer from "component/Layout/Footer";
+import Header from "component/Layout/Header";
 import { useRouter } from 'next/router'
 import React, { Fragment, useEffect, useState } from 'react'
+import Loading from 'component/Loading/Loading';
 
 const BookDetail = () => {
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const [book, setBook] = useState();
-    const [loading, setLoading] = useState(false)
     useEffect(() => {
         (async () => {
-            setLoading(true)
+            setLoading(true);
             const id = router.query.id;
             const book = await bookApi.getBookById(id);
             setBook(book)
@@ -20,7 +21,9 @@ const BookDetail = () => {
     }, [])
 
     return (
-        <Fragment> {loading && <Loading />} <Layout>
+        <Fragment>
+            {loading && <Loading />}
+            <Header />
             {book && <div className="container my-5">
 
                 <section>
@@ -93,9 +96,10 @@ const BookDetail = () => {
                 </section>
 
             </div>}
-        </Layout></Fragment>
-
+            <Footer />
+        </Fragment>
     )
 }
 
 export default BookDetail
+
