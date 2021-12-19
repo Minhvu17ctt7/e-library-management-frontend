@@ -25,11 +25,12 @@ const Header = () => {
 
     <header className="p-3 border-bottom">
       <div className="container-fluid">
-        <Row><Col xs={2}>
-          <a href={isLoggedIn ? "/manage" : "/"}>
-            <h6>E-LIBRARY-MANAGEMENT</h6>
-          </a>
-        </Col>
+        <Row>
+          <Col xs={2} className="d-flex align-items-center">
+            <a href={isLoggedIn ? "/manage" : "/"}>
+              <h6 className='m-auto'>E-LIBRARY-MANAGEMENT</h6>
+            </a>
+          </Col>
           <Col className="d-flex flex-row-reverse">
             <div>
               <ul className="nav">

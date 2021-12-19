@@ -32,7 +32,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     if (ctx.pathname.includes("/manage")) {
       redirectUser(ctx, "/login");
     }
-  } else if (ctx.pathname === "/login") {
+  } else if (ctx.pathname === "/login" || ctx.pathname === "/") {
     redirectUser(ctx, "/manage")
   }
 

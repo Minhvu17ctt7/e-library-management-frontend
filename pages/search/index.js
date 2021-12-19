@@ -1,45 +1,69 @@
-import { useState, useEffect } from "react";
+import { BASE_URL } from "api/axiosClients";
+import bookApi from "api/bookApi";
 import Footer from "component/Layout/Footer";
 import Header from "component/Layout/Header";
-import { Button, Card, Form } from "react-bootstrap";
-import bookApi from "api/bookApi";
+import Loading from "component/Loading/Loading";
 import { useRouter } from "next/router";
-import { BASE_URL } from "api/axiosClients";
+import { useEffect, useRef, useState } from "react";
+import { Form } from "react-bootstrap";
 
 export default function Search() {
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const [books, setBooks] = useState();
-    const [page, setPage] = useState();
+    const [keySearch, setKeySearch] = useState('');
+    let page = +router.query.id || 1;
     const [totalPage, setTotalPage] = useState();
+    const start = page === 1 ? 0 : (page - 1) * 4;
+    const didMount = useRef(false);
+
     useEffect(() => {
         (async () => {
-            const page = router.query.id || 1;
-            setPage(page)
+            setLoading(true);
             //Lấy sách theo page, vì strapi version 3. chưa hỗ trợ pagination nên phải làm theo cách start, limit
-            const start = +page === 1 ? 0 : (+page - 1) * 4;
-            const books = await bookApi.getBooks(start);
+            const books = await bookApi.getBooks({ "_start": start });
             setBooks(books)
             //Tính tổng page
             const numberOfMovies = await bookApi.countBook();
             const totalPage = Math.floor(numberOfMovies / 3)
             setTotalPage(totalPage)
+            setLoading(false)
         })()
     }, [])
+
+    useEffect(() => {
+        let timer;
+        if (didMount.current) {
+            timer = setTimeout(async () => {
+                const books = await bookApi.getBooks({ "_start": start, "name": keySearch });
+                setBooks(books);
+            }, 500);
+        }
+        else didMount.current = true;
+
+        return () => clearTimeout(timer);
+    }, [keySearch]);
+
+    const handleSearch = (event) => {
+        setKeySearch(event.target.value);
+    };
+
     return (
         <>
+            {loading && <Loading />}
             <Header />
             <main style={{ height: '85vh' }}>
-                <Form className="ml-5 d-inline">
-                    <Form.Group className="w-25">
+                <Form className="d-inline">
+                    <Form.Group className="w-25 mx-5 my-3">
                         <Form.Label>Tra cứu sách</Form.Label>
-                        <Form.Control type="text" placeholder="Nhập tên sách" required />
+                        <Form.Control type="text" placeholder="Nhập tên sách" onChange={handleSearch} />
                     </Form.Group>
                 </Form>
-                {books && <section style={{ backgroundColor: "#eee" }}>
+                {books && <section>
                     <div className="row">
                         {books.map(book => (
                             <div className="col-lg-3 col-md-3 mb-3">
-                                <div className="card">
+                                <div className="card h-100">
                                     <div
                                         className="bg-image hover-zoom ripple ripple-surface ripple-surface-light text-center"
                                         data-mdb-ripple-color="light"
@@ -54,9 +78,13 @@ export default function Search() {
                                             <h5 className="card-title mb-3">{book.name}</h5>
                                         </a>
                                         <a href="" className="text-reset">
-                                            <p>Category</p>
+                                            <p>Remain: {book.remain}</p>
                                         </a>
-                                        <h6 className="mb-3">$61.99</h6>
+                                        <button type="button" class="btn btn-outline-primary" data-mdb-ripple-color="dark"
+                                            onClick={() => router.push(`/search/${book.id}`)}
+                                        >
+                                            Detail
+                                        </button>
                                     </div>
                                 </div>
                             </div>))}

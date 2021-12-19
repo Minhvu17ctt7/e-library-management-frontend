@@ -4,8 +4,7 @@ import Cookies from "js-cookie"
 import nookies from 'nookies'
 // Set up default config for http requests here
 
-// export const BASE_URL = process.env.NEXT_APP_BASE_URL || 'http://localhost:1337';
-export const BASE_URL = "https://e-library-management-mhh.herokuapp.com"
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:1337';
 
 const axiosClient = axios.create({
 	baseURL: BASE_URL,

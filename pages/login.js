@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { Card, Container, Form, Button, Spinner } from "react-bootstrap"
-import { useFormik } from "formik";
-import { useRouter } from "next/router";
 import authenApi from "api/authenApi";
+import { useFormik } from "formik";
 import Cookies from "js-cookie";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { Spinner } from "react-bootstrap";
 
 const login = () => {
   const [error, setError] = useState();
@@ -61,7 +62,7 @@ const login = () => {
               </div>
               {error && <p className="text-danger text-center">Username or password invalid</p>}
               {/* <!-- Submit button --> */}
-              <div className="text-center">
+              <div className="text-center mb-3">
                 <button type="submit" className="btn btn-primary btn-lg btn-block w-50 m-auto" disabled={loading} >{loading ? <Spinner
                   as="span"
                   animation="border"
@@ -69,12 +70,18 @@ const login = () => {
                   role="status"
                   aria-hidden="true"
                 /> : "Sign in"}</button>
+
+              </div>
+              <div className="text-center">
+                <Link href="/">
+                  <a style={{ fontSize: '16px' }}><i class="bi bi-arrow-left"></i> Back to home</a>
+                </Link>
               </div>
             </form>
           </div>
         </div>
-      </div>
-    </section>
+      </div >
+    </section >
   )
 }
 

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, Fragment } from 'react'
-import FormBook from 'component/book/formBook'
 import bookApi from 'api/bookApi'
-import nookies from 'nookies'
+import FormBook from 'component/book/formBook'
 import { useRouter } from 'next/router'
+import React, { Fragment, useEffect, useState } from 'react'
+import Loading from 'component/Loading/Loading'
 
 const UpdateBook = () => {
     const router = useRouter();
@@ -10,9 +10,11 @@ const UpdateBook = () => {
     const [authors, setAuthors] = useState();
     const [providers, setProviders] = useState();
     const [book, setBook] = useState();
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         (async () => {
+            setLoading(true);
             const id = router.query.id;
             const categories = await bookApi.getCategories();
             const authors = await bookApi.getAuthors();
@@ -22,10 +24,12 @@ const UpdateBook = () => {
             setProviders(providers);
             setAuthors(authors);
             setBook(book);
+            setLoading(false)
         })()
     }, [])
     return (
         <Fragment>
+            {loading && <Loading />}
             {book && <FormBook categories={categories} authors={authors} providers={providers} book={book} />}
         </Fragment>
     )
