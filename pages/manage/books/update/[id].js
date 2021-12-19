@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import FormBook from 'component/book/formBook'
 import bookApi from 'api/bookApi'
 import nookies from 'nookies'
@@ -25,7 +25,9 @@ const UpdateBook = () => {
         })()
     }, [])
     return (
-        <FormBook categories={categories} authors={authors} providers={providers} book={book} />
+        <Fragment>
+            {book && <FormBook categories={categories} authors={authors} providers={providers} book={book} />}
+        </Fragment>
     )
 }
 

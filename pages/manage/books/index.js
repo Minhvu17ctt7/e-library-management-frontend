@@ -15,23 +15,27 @@ const Books = () => {
     const [showModalNotify, setShowModalNotify] = useState(false);
     const [currentBook, setCurrentBook] = useState();
     const [books, setBooks] = useState();
-    const [page, setPage] = useState();
+    const page = +router.query.page || 1;
     const [totalPage, setTotalPage] = useState();
+    const [hasOnChange, setHasOnChange] = useState(false);
+
+    const selectDocumentHandler = () => {
+        setHasOnChange(preState => !preState);
+    };
 
     useEffect(() => {
         (async () => {
-            const page = router.query.id || 1;
-            setPage(page)
             //Lấy sách theo page, vì strapi version 3. chưa hỗ trợ pagination nên phải làm theo cách start, limit
-            const start = +page === 1 ? 0 : (+page - 1) * 4;
+            const start = page === 1 ? 0 : (page - 1) * 4;
+
             const books = await bookApi.getBooks(start);
             setBooks(books)
             //Tính tổng page
-            const numberOfMovies = await bookApi.countBook();
-            const totalPage = Math.floor(numberOfMovies / 3)
+            const numberOfBooks = await bookApi.countBook();
+            const totalPage = Math.ceil(numberOfBooks / 4)
             setTotalPage(totalPage)
         })()
-    }, [])
+    }, [page, hasOnChange])
 
     //handle open và close modal hỏi xem có muốn xóa sách hay k
     const handleCloseModalDelete = () => setShowModalDelete(false);
@@ -70,9 +74,10 @@ const Books = () => {
 
     //Hiện item pagination 
     const itemPagination = () => {
+
         let list = [];
         for (let i = 0; i < totalPage; i++) {
-            list.push(<li key={i} className="page-item" onClick={() => handleClickPagination(i + 1)}><a className="page-link">{i + 1}</a></li>)
+            list.push(<li key={i} className={page === (i + 1) ? "page-item active" : "page-item"} onClick={() => handleClickPagination(i + 1)}><a className="page-link">{i + 1}</a></li>)
         }
         return list;
     }
@@ -144,6 +149,7 @@ const Books = () => {
                 showModalDelete={showModalDelete}
                 handleCloseModalDelete={handleCloseModalDelete}
                 idBook={currentBook}
+                selectDocumentHandler={selectDocumentHandler}
             />
             <ModalNotify
                 showModal={showModalNotify}

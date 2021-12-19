@@ -13,6 +13,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
     const [srcImage, setSrcImage] = useState();
     //Lưu file để create
     const [fileImage, setFileImage] = useState();
+    console.log("book...", book)
 
     //Cái formik này để quản lý value input dễ hơn state
     const formik = useFormik({
@@ -36,6 +37,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
             router.replace("/manage/books");
         },
     });
+    console.log("formik...", formik.values)
 
     //khi input file change thì gọi để show image preview
     const handleChangePhoto = (e) => {
@@ -61,7 +63,149 @@ const FormBook = ({ authors, categories, providers, book }) => {
             <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">{
                 book ? `Update book id: ${book.id}` : 'Create book'
             }</h1>
-            <Form onSubmit={formik.handleSubmit}>
+            <form onSubmit={formik.handleSubmit}>
+                <div className="row">
+                    <div className="col-md-8 mb-4">
+                        <div className="card mb-4">
+                            <div className="card-header py-3">
+                                <h5 className="mb-0">Infomation book</h5>
+                            </div>
+                            <div className="card-body">
+
+                                {/* <!-- 2 column grid layout with text inputs for the first and last names --> */}
+                                <div className="row mb-4">
+                                    <div className="col">
+                                        <div className="form-outline">
+                                            <label className="form-label" for="form7Example1">Name book</label>
+                                            <input type="text" name="name" onChange={formik.handleChange}
+                                                value={formik.values.name}
+                                                className="form-control" />
+                                        </div>
+                                    </div>
+                                    <div className="col">
+                                        <div className="form-outline">
+                                            <label className="form-label" for="form7Example2">Page</label>
+                                            <input type="number" step='1' name="page" placeholder="page"
+                                                onChange={formik.handleChange}
+                                                value={formik.values.page}
+                                                className="form-control"
+                                                min={1}
+                                                required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row mb-4">
+                                    <div className="col">
+                                        <div className="form-outline">
+                                            <label className="form-label" for="form7Example1">Quantity</label>
+                                            <input type="number" step='1' name="remain"
+                                                onChange={formik.handleChange}
+                                                value={formik.values.remain}
+                                                className="form-control"
+                                                placeholder="remain" min={1} max={1000} required />
+                                        </div>
+                                    </div>
+                                    <div className="col">
+                                        <div className="form-outline">
+                                            <label className="form-label" for="form7Example2">Price</label>
+                                            <input type="number" step='1' name="price"
+                                                onChange={formik.handleChange}
+                                                value={formik.values.price}
+                                                className="form-control"
+                                                placeholder="Price" min={5000} max={10000000} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row mb-4">
+                                    <div className="col">
+                                        <div className="form-outline">
+                                            <label className="form-label" for="form7Example1">Author</label>
+                                            <select name="author" onChange={formik.handleChange}
+                                                defaultValue={formik.values.author}
+                                                className="form-control"
+                                            >
+                                                <option>Choose author</option>
+                                                {
+                                                    authors?.map(author => (
+                                                        <option key={author.id} value={author.id}>{author.name}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="col">
+                                        <div className="form-outline">
+                                            <label className="form-label" for="form7Example2">Category</label>
+                                            <select name="category" onChange={formik.handleChange}
+                                                defaultValue={formik.values.category}
+                                                className="form-control"
+                                            >
+                                                <option>Choose category</option>
+                                                {
+                                                    categories?.map(category => (
+                                                        <option key={category.id} value={category.id}>{category.name}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row mb-4">
+                                    <div className="col-6">
+                                        <div className="form-outline">
+                                            <label className="form-label" for="form7Example1">Author</label>
+                                            <select name="provider"
+                                                onChange={formik.handleChange}
+                                                defaultValue={formik.values.provider}
+                                                className="form-control"
+                                            >
+                                                <option>Choose provider</option>
+                                                {
+                                                    providers?.map(provider => (
+                                                        <option key={provider.id} value={provider.id}>{provider.name}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                {/* <!-- Message input --> */}
+                                <div className="form-outline mb-4">
+                                    <label className="form-label" for="form7Example7">Description</label>
+                                    <textarea className="form-control" id="form7Example7" rows="6"
+                                        placeholder="Description books"
+                                        name="description"
+                                        onChange={formik.handleChange}
+                                        value={formik.values.description}></textarea>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-md-4 mb-4">
+                        <div className="card mb-4">
+                            <div className="card-header py-3">
+                                <h5 className="mb-0">Image</h5>
+                            </div>
+                            <div className="card-body text-center">
+                                <img src={srcImagePhoto()}
+                                    className="img-fluid rounded rounded-left mb-2" alt="Thumbnail-book" style={{ width: "200px" }} />
+                                <Form.Control type="file" name="photo" onChange={handleChangePhoto} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-12 mb-4 text-center">
+                        <Button type="submit" class="btn btn-primary m-2">
+                            {book ? "Update" : "Create"}
+                        </Button>
+                        <button type="button" class="btn btn-secondary m-2" onClick={() => router.push("/management/books")}>Cancel</button>
+                    </div>
+                </div>
+            </form>
+            {/* <Form onSubmit={formik.handleSubmit}>
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridEmail">
                         <Form.Label>Name</Form.Label>
@@ -164,7 +308,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
                 <Button variant="primary" type="submit">
                     {book ? "Update" : "Create"}
                 </Button>
-            </Form>
+            </Form> */}
         </Layout>
     )
 }
