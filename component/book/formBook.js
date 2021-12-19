@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import bookApi from 'api/bookApi'
 import Layout from 'component/Layout/Layout'
 import { Form, Row, Col, Button } from 'react-bootstrap'
+import { BASE_URL } from 'api/axiosClients'
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie'
 
 const FormBook = ({ authors, categories, providers, book }) => {
-    const history = useRouter();
+    const router = useRouter();
     //Lưu src để hiện image preview khi chọn image
     const [srcImage, setSrcImage] = useState();
     //Lưu file để create
@@ -25,12 +27,13 @@ const FormBook = ({ authors, categories, providers, book }) => {
             category: book?.category.id ? book?.category.id : null,
         },
         onSubmit: async (values) => {
+            const jwt = Cookies.get("jwt");
             if (book) {
-                await bookApi.updateBook(values, fileImage, book.id);
+                await bookApi.updateBook(values, fileImage, book.id, jwt);
             } else {
-                await bookApi.createBook(values, fileImage);
+                await bookApi.createBook(values, fileImage, jwt);
             }
-            history.replace("/manage/books");
+            router.replace("/manage/books");
         },
     });
 
@@ -49,7 +52,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
 
     const srcImagePhoto = () => {
         if (srcImage) return srcImage;
-        if (book?.photo) return `http://localhost:1337${book.photo.url}`;
+        if (book?.photo) return `${BASE_URL}${book.photo.url}`;
         return "/image/thumbnail.png"
     }
 
@@ -101,7 +104,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
                         >
                             <option>Choose author</option>
                             {
-                                authors.map(author => (
+                                authors?.map(author => (
                                     <option key={author.id} value={author.id}>{author.name}</option>
                                 ))
                             }
@@ -114,7 +117,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
                         >
                             <option>Choose category</option>
                             {
-                                categories.map(category => (
+                                categories?.map(category => (
                                     <option key={category.id} value={category.id}>{category.name}</option>
                                 ))
                             }
@@ -132,7 +135,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
                             >
                                 <option>Choose provider</option>
                                 {
-                                    providers.map(provider => (
+                                    providers?.map(provider => (
                                         <option key={provider.id} value={provider.id}>{provider.name}</option>
                                     ))
                                 }

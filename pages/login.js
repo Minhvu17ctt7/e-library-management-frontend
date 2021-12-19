@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import authenApi from "api/authenApi";
 import Cookies from "js-cookie";
+import nookies from 'nookies'
 
 const Login = () => {
   const [error, setError] = useState();
@@ -16,15 +17,17 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         const res = await authenApi.login({ identifier: values.identifier, password: values.password });
+        Cookies.set("jwt", res.jwt);
+        Cookies.set("user", JSON.stringify(res.user));
+        Cookies.set("isLoggedIn", true)
+        // nookies.set(null, 'jwt', res.jwt, {
+        //   maxAge: 30 * 24 * 60 * 60,
+        // })
+        // nookies.set(null, 'isLoggedIn', true, {
+        //   maxAge: 30 * 24 * 60 * 60,
+        // })
 
-        Cookies.set('jwt', res.jwt, {
-          expires: 7,
-        })
-        Cookies.set('isLoggedIn', true, {
-          expires: 7,
-        })
-
-        Cookies.set("user", JSON.stringify(res.user))
+        // nookies.set(null, "user", JSON.stringify(res.user))
         router.push("/manage")
 
       } catch (error) {

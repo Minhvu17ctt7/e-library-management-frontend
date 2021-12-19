@@ -1,26 +1,33 @@
 import axiosClient from "./axiosClients";
 
+
 const bookApi = {
-    getBooks: (start) => {
+    getBooks: async (start) => {
         const url = `/books?_limit=8&_start=${start}`;
         return axiosClient.get(url);
     },
+
     getBookById: (id) => {
         const url = `/books/${id}`;
         return axiosClient.get(url);
     },
+
     getCategories: () => {
         return axiosClient.get("/categories");
     },
+    
     getAuthors: () => {
         return axiosClient.get("/authors");
     },
+
     getProviders: () => {
         return axiosClient.get("/providers");
     },
+
     countBook: () => {
         return axiosClient.get('/books/count');
     },
+
     createBook: (data, file) => {
         const formData = new FormData();
         formData.append('data', JSON.stringify(data));
@@ -29,6 +36,7 @@ const bookApi = {
         }
         return axiosClient.post('/books', formData);
     },
+
     updateBook: (data, file, id) => {
         const formData = new FormData();
         formData.append('data', JSON.stringify(data));

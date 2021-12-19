@@ -3,7 +3,7 @@ import Header from "component/Layout/Header";
 import { Button, Card, Form } from "react-bootstrap";
 import bookApi from "api/bookApi";
 
-export default function Search({ books, page, totalPage }) {
+export default function Search() {
     console.log(books)
     return (
         <>
@@ -88,21 +88,4 @@ export default function Search({ books, page, totalPage }) {
             <Footer />
         </>
     );
-}
-
-export async function getServerSideProps({ query: { page = 1 } }) {
-    //Lấy sách theo page, vì strapi version 3. chưa hỗ trợ pagination nên phải làm theo cách start, limit
-    const start = +page === 1 ? 0 : (+page - 1) * 4;
-    const books = await bookApi.getBooks(start);
-    //Tính tổng page
-    const numberOfMovies = await bookApi.countBook();
-    const totalPage = Math.floor(numberOfMovies / 3)
-
-    return {
-        props: {
-            books: books,
-            page: +page,
-            totalPage
-        }
-    }
 }

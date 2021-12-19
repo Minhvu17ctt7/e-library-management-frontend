@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { Modal, Button } from 'react-bootstrap'
@@ -6,12 +6,31 @@ import bookApi from 'api/bookApi'
 import Layout from 'component/Layout/Layout'
 import ModalDeleteBook from 'component/modal/DeleteBook'
 import ModalNotify from 'component/modal/NotifyModal'
+import nookies from 'nookies'
 
-const Books = ({ books, page, totalPage }) => {
+const Books = () => {
     const router = useRouter();
     const [showModalDelete, setShowModalDelete] = useState(false);
     const [showModalNotify, setShowModalNotify] = useState(false);
     const [currentBook, setCurrentBook] = useState();
+    const [books, setBooks] = useState();
+    const [page, setPage] = useState();
+    const [totalPage, setTotalPage] = useState();
+
+    useEffect(() => {
+        (async () => {
+            const page = router.query.id || 1;
+            setPage(page)
+            //Lấy sách theo page, vì strapi version 3. chưa hỗ trợ pagination nên phải làm theo cách start, limit
+            const start = +page === 1 ? 0 : (+page - 1) * 4;
+            const books = await bookApi.getBooks(start);
+            setBooks(books)
+            //Tính tổng page
+            const numberOfMovies = await bookApi.countBook();
+            const totalPage = Math.floor(numberOfMovies / 3)
+            setTotalPage(totalPage)
+        })()
+    }, [])
 
     //handle open và close modal hỏi xem có muốn xóa sách hay k
     const handleCloseModalDelete = () => setShowModalDelete(false);
@@ -63,7 +82,7 @@ const Books = ({ books, page, totalPage }) => {
             <Link href="/manage/books/create">
                 <Button className="btn btn-primary">Create book</Button>
             </Link>
-            <table className="table">
+            {books && (<table className="table">
                 <thead className="thead-light">
                     <tr>
                         <th scope="col">ID</th>
@@ -89,8 +108,8 @@ const Books = ({ books, page, totalPage }) => {
                         </tr>
                     ))}
                 </tbody>
-            </table>
-            <nav aria-label="Page navigation example">
+            </table>)}
+            {books && (<nav aria-label="Page navigation example">
                 <ul className="pagination">
                     <li className={page <= 1 ? 'page-item disabled' : 'page-item'}
                         onClick={() => handleClickPagination(page - 1)}
@@ -110,7 +129,7 @@ const Books = ({ books, page, totalPage }) => {
                         </a>
                     </li>
                 </ul>
-            </nav>
+            </nav>)}
             <ModalDeleteBook
                 showModalDelete={showModalDelete}
                 handleCloseModalDelete={handleCloseModalDelete}
@@ -130,20 +149,3 @@ const Books = ({ books, page, totalPage }) => {
 }
 
 export default Books
-
-export async function getServerSideProps({ query: { page = 1 } }) {
-    //Lấy sách theo page, vì strapi version 3. chưa hỗ trợ pagination nên phải làm theo cách start, limit
-    const start = +page === 1 ? 0 : (+page - 1) * 4;
-    const books = await bookApi.getBooks(start);
-    //Tính tổng page
-    const numberOfMovies = await bookApi.countBook();
-    const totalPage = Math.floor(numberOfMovies / 3)
-
-    return {
-        props: {
-            books: books,
-            page: +page,
-            totalPage
-        }
-    }
-}

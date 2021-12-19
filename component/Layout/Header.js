@@ -2,18 +2,22 @@ import { Dropdown, Button, Row, Col } from 'react-bootstrap'
 import Link from 'next/link'
 import React from 'react'
 import Cookies from 'js-cookie'
+import { parseCookies, destroyCookie } from 'nookies'
 import { useRouter } from 'next/router'
 
 const Header = () => {
 
   const router = useRouter();
-
-  const isLoggedIn = Cookies.get("isLoggedIn") === 'true'
+  // const isLoggedIn = parseCookies().isLoggedIn === 'true'
+  const isLoggedIn = Cookies.get("isLoggedIn") === 'true';
 
   const handleLogout = () => {
     Cookies.remove('jwt');
     Cookies.remove('user');
     Cookies.set('isLoggedIn', false);
+    // localStorage.removeItem("user");
+    // localStorage.removeItem("jwt");
+    // localStorage.removeItem("isLoggedIn");
     router.push("/");
   }
 

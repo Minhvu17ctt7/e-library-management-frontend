@@ -1,9 +1,11 @@
 import axios from 'axios';
 import queryString from 'query-string';
 import Cookies from "js-cookie"
+import nookies from 'nookies'
 // Set up default config for http requests here
 
-export const BASE_URL = process.env.NEXT_APP_BASE_URL || 'http://localhost:1337';
+// export const BASE_URL = process.env.NEXT_APP_BASE_URL || 'http://localhost:1337';
+export const BASE_URL = "https://e-library-management-mhh.herokuapp.com"
 
 const axiosClient = axios.create({
 	baseURL: BASE_URL,
@@ -15,11 +17,12 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
 	async (config) => {
-		// Handle token here ...
-		const token = Cookies.get("jwt")
+		const token = Cookies.get("jwt");
+		// const token = localStorage.getItem("jwt")
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
+		// Handle token here ...
 		return config;
 	}
 );
