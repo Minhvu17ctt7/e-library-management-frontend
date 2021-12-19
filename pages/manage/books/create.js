@@ -1,27 +1,27 @@
 import bookApi from 'api/bookApi';
 import FormBook from 'component/book/formBook';
 import nookies from 'nookies'
+import { useEffect, useState } from 'react';
 
-const CreateBook = (props) => {
+const CreateBook = () => {
+    const [categories, setCategories] = useState();
+    const [authors, setAuthors] = useState();
+    const [providers, setProviders] = useState();
 
+    useEffect(() => {
+        (async () => {
+            const categories = await bookApi.getCategories();
+            const authors = await bookApi.getAuthors();
+            const providers = await bookApi.getProviders();
+            setCategories(categories);
+            setProviders(providers);
+            setAuthors(authors);
+        })()
+    }, [])
+    
     return (
-        <FormBook {...props} />
+        <FormBook categories={categories} authors={authors} providers={providers} />
     )
 }
 
 export default CreateBook
-
-export async function getServerSideProps(context) {
-    const jwt = nookies.get(context).jwt;
-    //Mấy cái này lấy để show cho user chọn
-    const categories = await bookApi.getCategories(jwt);
-    const authors = await bookApi.getAuthors(jwt);
-    const providers = await bookApi.getProviders(jwt);
-    return {
-        props: {
-            categories,
-            authors,
-            providers
-        },
-    }
-}

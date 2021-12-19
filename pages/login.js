@@ -17,15 +17,17 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         const res = await authenApi.login({ identifier: values.identifier, password: values.password });
+        Cookies.set("jwt", res.jwt);
+        Cookies.set("user", JSON.stringify(res.user));
+        Cookies.set("isLoggedIn", true)
+        // nookies.set(null, 'jwt', res.jwt, {
+        //   maxAge: 30 * 24 * 60 * 60,
+        // })
+        // nookies.set(null, 'isLoggedIn', true, {
+        //   maxAge: 30 * 24 * 60 * 60,
+        // })
 
-        nookies.set(null, 'jwt', res.jwt, {
-          maxAge: 30 * 24 * 60 * 60,
-        })
-        nookies.set(null, 'isLoggedIn', true, {
-          maxAge: 30 * 24 * 60 * 60,
-        })
-
-        nookies.set(null, "user", JSON.stringify(res.user))
+        // nookies.set(null, "user", JSON.stringify(res.user))
         router.push("/manage")
 
       } catch (error) {

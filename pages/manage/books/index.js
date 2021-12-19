@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { Modal, Button } from 'react-bootstrap'
@@ -8,11 +8,29 @@ import ModalDeleteBook from 'component/modal/DeleteBook'
 import ModalNotify from 'component/modal/NotifyModal'
 import nookies from 'nookies'
 
-const Books = ({ books, page, totalPage, jwt2 }) => {
+const Books = () => {
     const router = useRouter();
     const [showModalDelete, setShowModalDelete] = useState(false);
     const [showModalNotify, setShowModalNotify] = useState(false);
     const [currentBook, setCurrentBook] = useState();
+    const [books, setBooks] = useState();
+    const [page, setPage] = useState();
+    const [totalPage, setTotalPage] = useState();
+
+    useEffect(() => {
+        (async () => {
+            const page = router.query.id || 1;
+            setPage(page)
+            //Lấy sách theo page, vì strapi version 3. chưa hỗ trợ pagination nên phải làm theo cách start, limit
+            const start = +page === 1 ? 0 : (+page - 1) * 4;
+            const books = await bookApi.getBooks(start);
+            setBooks(books)
+            //Tính tổng page
+            const numberOfMovies = await bookApi.countBook();
+            const totalPage = Math.floor(numberOfMovies / 3)
+            setTotalPage(totalPage)
+        })()
+    }, [])
 
     //handle open và close modal hỏi xem có muốn xóa sách hay k
     const handleCloseModalDelete = () => setShowModalDelete(false);
@@ -131,22 +149,3 @@ const Books = ({ books, page, totalPage, jwt2 }) => {
 }
 
 export default Books
-
-export async function getServerSideProps(context) {
-    const jwt = nookies.get(context).jwt;
-    const page = context.query.page || 1;
-    //Lấy sách theo page, vì strapi version 3. chưa hỗ trợ pagination nên phải làm theo cách start, limit
-    const start = +page === 1 ? 0 : (+page - 1) * 4;
-    const books = await bookApi.getBooks(start, jwt);
-    //Tính tổng page
-    const numberOfMovies = await bookApi.countBook(jwt);
-    const totalPage = Math.floor(numberOfMovies / 3)
-
-    return {
-        props: {
-            books: books,
-            page: +page,
-            totalPage,
-        }
-    }
-}

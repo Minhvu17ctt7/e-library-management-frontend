@@ -1,43 +1,47 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "styles/globals.css"
-import Router from 'next/router'
 import { parseCookies } from 'nookies'
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+  // if (!Cookies.get("jwt"))
+  //   router.push("/login");
   return <Component {...pageProps} />
 }
 
-function redirectUser(ctx, location) {
-  if (ctx.req) {
-    ctx.res.writeHead(302, { Location: location });
-    ctx.res.end();
-  } else {
-    Router.push(location);
-  }
-}
+// function redirectUser(ctx, location) {
+//   if (ctx.req) {
+//     ctx.res.writeHead(302, { Location: location });
+//     ctx.res.end();
+//   } else {
+//     Router.push(location);
+//   }
+// }
 
-MyApp.getInitialProps = async ({ Component, ctx }) => {
-  let pageProps = {}
-  const jwt = parseCookies(ctx).jwt
+// MyApp.getInitialProps = async ({ Component, ctx }) => {
+//   let pageProps = {}
+//   const jwt = parseCookies(ctx).jwt
 
-  if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx)
-  }
+//   if (Component.getInitialProps) {
+//     pageProps = await Component.getInitialProps(ctx)
+//   }
 
-  //nếu chưa đăng nhập thì điều hướng đến trang đăng nhập
-  //đến đã đăng nhập muốn vào trang login thì phải nhấn button logout, nên điều hướng đến manage
-  if (!jwt) {
-    if (ctx.pathname.includes("/manage")) {
-      redirectUser(ctx, "/login");
-    }
-  } else if (ctx.pathname === "/login") {
-    redirectUser(ctx, "/manage")
-  }
+//   //nếu chưa đăng nhập thì điều hướng đến trang đăng nhập
+//   //đến đã đăng nhập muốn vào trang login thì phải nhấn button logout, nên điều hướng đến manage
+//   if (!jwt) {
+//     if (ctx.pathname.includes("/manage")) {
+//       redirectUser(ctx, "/login");
+//     }
+//   } else if (ctx.pathname === "/login") {
+//     redirectUser(ctx, "/manage")
+//   }
 
-  return {
-    pageProps
-  }
-}
+//   return {
+//     pageProps
+//   }
+// }
 
 export default MyApp

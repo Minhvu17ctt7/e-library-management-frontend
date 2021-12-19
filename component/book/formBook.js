@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import Cookies from 'js-cookie'
 
 const FormBook = ({ authors, categories, providers, book }) => {
-    const history = useRouter();
+    const router = useRouter();
     //Lưu src để hiện image preview khi chọn image
     const [srcImage, setSrcImage] = useState();
     //Lưu file để create
@@ -33,7 +33,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
             } else {
                 await bookApi.createBook(values, fileImage, jwt);
             }
-            history.replace("/manage/books");
+            router.replace("/manage/books");
         },
     });
 
@@ -104,7 +104,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
                         >
                             <option>Choose author</option>
                             {
-                                authors.map(author => (
+                                authors?.map(author => (
                                     <option key={author.id} value={author.id}>{author.name}</option>
                                 ))
                             }
@@ -117,7 +117,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
                         >
                             <option>Choose category</option>
                             {
-                                categories.map(category => (
+                                categories?.map(category => (
                                     <option key={category.id} value={category.id}>{category.name}</option>
                                 ))
                             }
@@ -135,7 +135,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
                             >
                                 <option>Choose provider</option>
                                 {
-                                    providers.map(provider => (
+                                    providers?.map(provider => (
                                         <option key={provider.id} value={provider.id}>{provider.name}</option>
                                     ))
                                 }

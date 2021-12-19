@@ -17,6 +17,11 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
 	async (config) => {
+		const token = Cookies.get("jwt");
+		// const token = localStorage.getItem("jwt")
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
+		}
 		// Handle token here ...
 		return config;
 	}

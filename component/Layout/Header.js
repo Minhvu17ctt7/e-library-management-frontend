@@ -8,17 +8,16 @@ import { useRouter } from 'next/router'
 const Header = () => {
 
   const router = useRouter();
-
-  // const isLoggedIn = Cookies.get("isLoggedIn") === 'true'
-  const isLoggedIn = parseCookies().isLoggedIn === 'true'
+  // const isLoggedIn = parseCookies().isLoggedIn === 'true'
+  const isLoggedIn = Cookies.get("isLoggedIn") === 'true';
 
   const handleLogout = () => {
-    destroyCookie(null, "jwt");
-    destroyCookie(null, "user");
-    destroyCookie(null, "isLoggedIn");
-    // Cookies.remove('jwt');
-    // Cookies.remove('user');
-    // Cookies.set('isLoggedIn', false);
+    Cookies.remove('jwt');
+    Cookies.remove('user');
+    Cookies.set('isLoggedIn', false);
+    // localStorage.removeItem("user");
+    // localStorage.removeItem("jwt");
+    // localStorage.removeItem("isLoggedIn");
     router.push("/");
   }
 
