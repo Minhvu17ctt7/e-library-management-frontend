@@ -6,6 +6,7 @@ import Loading from "component/Loading/Loading";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { Form } from "react-bootstrap";
+import NoData from "component/NoData";
 
 export default function Search() {
     const router = useRouter();
@@ -59,6 +60,7 @@ export default function Search() {
                         <Form.Control type="text" placeholder="Nhập tên sách" onChange={handleSearch} />
                     </Form.Group>
                 </Form>
+                {books && books.length <= 0 && !loading && <NoData />}
                 {books && <section>
                     <div className="row">
                         {books.map(book => (
