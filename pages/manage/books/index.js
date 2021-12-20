@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { Fragment, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
+import NoData from 'component/NoData'
 
 const Books = () => {
     const router = useRouter();
@@ -92,6 +93,7 @@ const Books = () => {
                 <Link href="/manage/books/create">
                     <Button className="btn btn-primary">Create book</Button>
                 </Link>
+                {books && books.length <= 0 && !loading && <NoData />}
                 {books && (<table className="table align-middle">
                     <thead>
                         <tr>
@@ -128,27 +130,28 @@ const Books = () => {
                         ))}
                     </tbody>
                 </table>)}
-                {books && (<nav aria-label="Page navigation example">
-                    <ul className="pagination">
-                        <li className={page <= 1 ? 'page-item disabled' : 'page-item'}
-                            onClick={() => handleClickPagination(page - 1)}
-                        >
-                            <a className="page-link" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        {
-                            itemPagination()
-                        }
-                        <li className={page >= totalPage ? 'page-item disabled' : 'page-item'}
-                            onClick={() => handleClickPagination(page + 1)}
-                        >
-                            <a className="page-link" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>)}
+                {books && (
+                    <nav aria-label="Page navigation">
+                        <ul className="pagination">
+                            <li className={page <= 1 ? 'page-item disabled' : 'page-item'}
+                                onClick={() => handleClickPagination(page - 1)}
+                            >
+                                <a className="page-link" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {
+                                itemPagination()
+                            }
+                            <li className={page >= totalPage ? 'page-item disabled' : 'page-item'}
+                                onClick={() => handleClickPagination(page + 1)}
+                            >
+                                <a className="page-link" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>)}
                 <ModalDeleteBook
                     showModalDelete={showModalDelete}
                     handleCloseModalDelete={handleCloseModalDelete}
@@ -165,7 +168,7 @@ const Books = () => {
                     }}
                 />
             </Layout >
-        </Fragment>
+        </Fragment >
     )
 }
 
