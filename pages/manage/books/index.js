@@ -92,7 +92,7 @@ const Books = () => {
                 <Link href="/manage/books/create">
                     <Button className="btn btn-primary">Create book</Button>
                 </Link>
-                {books && (<table class="table align-middle">
+                {books && (<table className="table align-middle">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
@@ -120,7 +120,7 @@ const Books = () => {
                                             <i className="bi bi-pencil-square"></i>
                                         </button>
                                     </Link>
-                                    <button type="button" class="btn btn-danger btn-sm px-3 m-2" onClick={() => handleDeleteBook(book.id)}>
+                                    <button type="button" className="btn btn-danger btn-sm px-3 m-2" onClick={() => handleDeleteBook(book.id)}>
                                         <i className="bi bi-trash"></i>
                                     </button></td>
 

@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { Spinner } from "react-bootstrap";
 
-const login = () => {
+const Login = () => {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -42,7 +42,7 @@ const login = () => {
             <form onSubmit={formik.handleSubmit}>
               {/* <!-- Email input --> */}
               <div className="form-outline mb-4">
-                <label className="form-label" for="form1Example13">Username</label>
+                <label className="form-label">Username</label>
                 <input type="text" id="form1Example13" className="form-control form-control-lg"
                   name="identifier"
                   onChange={formik.handleChange}
@@ -53,7 +53,7 @@ const login = () => {
 
               {/* <!-- Password input --> */}
               <div className="form-outline mb-4">
-                <label className="form-label" for="form1Example23">Password</label>
+                <label className="form-label">Password</label>
                 <input type="password" id="form1Example23" className="form-control form-control-lg"
                   name="password"
                   onChange={formik.handleChange}
@@ -74,7 +74,7 @@ const login = () => {
               </div>
               <div className="text-center">
                 <Link href="/">
-                  <a style={{ fontSize: '16px' }}><i class="bi bi-arrow-left"></i> Back to home</a>
+                  <a style={{ fontSize: '16px' }}><i className="bi bi-arrow-left"></i> Back to home</a>
                 </Link>
               </div>
             </form>
@@ -85,4 +85,4 @@ const login = () => {
   )
 }
 
-export default login
+export default Login
