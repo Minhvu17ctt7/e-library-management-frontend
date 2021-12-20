@@ -62,7 +62,7 @@ export default function Search() {
                 {books && <section>
                     <div className="row">
                         {books.map(book => (
-                            <div className="col-lg-3 col-md-3 mb-3">
+                            <div className="col-lg-3 col-md-3 mb-3" key={book.id}>
                                 <div className="card h-100">
                                     <div
                                         className="bg-image hover-zoom ripple ripple-surface ripple-surface-light text-center"
@@ -80,7 +80,7 @@ export default function Search() {
                                         <a href="" className="text-reset">
                                             <p>Remain: {book.remain}</p>
                                         </a>
-                                        <button type="button" class="btn btn-outline-primary" data-mdb-ripple-color="dark"
+                                        <button type="button" className="btn btn-outline-primary" data-mdb-ripple-color="dark"
                                             onClick={() => router.push(`/search/${book.id}`)}
                                         >
                                             Detail
