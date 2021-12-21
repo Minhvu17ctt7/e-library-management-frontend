@@ -110,7 +110,6 @@ const Books = () => {
                 />
                 {books && books.length <= 0 && !loading && <NoData />}
                 {books && !!books.length && (
-                  // <table className="table align-middle">
                   <Table striped bordered hover>
                     <thead>
                         <tr>

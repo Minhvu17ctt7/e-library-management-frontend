@@ -2,8 +2,16 @@ import axiosClient from "./axiosClients";
 
 
 const memberApi = {
-    getMembers: async (start) => {
-        const url = `/members?_limit=8&_start=${start}`;
+    getMembers: async (query) => {
+        const keys = Object.keys(query);
+        let params = keys.reduce((acc, key) => {
+            const value = query[key];
+            if (value) {
+                return `${acc}&${key}=${value}`;
+            }
+            return acc;
+        }, '');
+        const url = `/members?_limit=4&${params}`;
         return axiosClient.get(url);
     },
 
@@ -15,7 +23,7 @@ const memberApi = {
     // getCategories: () => {
     //     return axiosClient.get("/categories");
     // },
-    
+
     // getAuthors: () => {
     //     return axiosClient.get("/authors");
     // },
@@ -24,8 +32,16 @@ const memberApi = {
     //     return axiosClient.get("/providers");
     // },
 
-    countMember: () => {
-        return axiosClient.get('/members/count');
+    countMember: async (filter) => {
+        const keys = Object.keys(filter);
+        let params = keys.reduce((acc, key) => {
+            const value = filter[key];
+            if (value) {
+                return `${acc}&${key}=${value}`;
+            }
+            return acc;
+        }, '');
+        return await axiosClient.get(`/members/count?${params}`);
     },
 
     createMember: (data, file) => {
