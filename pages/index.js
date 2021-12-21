@@ -11,59 +11,39 @@ import Link from "next/link";
 export default function Home() {
   return (
     <>
+      <Head>
+        <title>
+          E-Library-Management
+        </title>
+      </Head>
       <Header />
-      <main style={{ height: '85vh'}} className="d-flex ">
-        <Carousel className="w-100">
-          <Carousel.Item>
-            <img
-              style={{ width: '100%', height: '85vh' }}
-              className="d-block"
-              src="/image/image-slider1.jpg"
-              alt="First slide"
-            />
-            <Carousel.Caption>
-              <div className={styles.sliderLabel}>
-
-                <h4>Quản lý sách hiệu quả</h4>
-                <p>Quản lý thư viện của bạn một cách hiệu quả, chính xác, đơn giản với E-library-management.</p>
+      <main style={{ height: '85vh' }} className="d-flex ">
+        <div
+          id="intro-example"
+          className="text-center img-fluid w-100"
+          style={{ backgroundImage: "url('/image/background2.jpg')" }}
+        >
+          <div className="mask h-100" style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}>
+            <div className="d-flex justify-content-center align-items-center h-100">
+              <div className="text-white">
+                <h1 className="mb-3">E-library-management</h1>
+                <h5 className="mb-4">Giải pháp quản lý thư viện hiệu quả</h5>
+                <Link href="/login">
+                  <button
+                    className="btn btn-outline-light btn-lg m-2"
+                    rel="nofollow"
+                  >Login</button>
+                </Link>
+                <Link href="/search">
+                  <button
+                    className="btn btn-outline-light btn-lg m-2"
+                    rel="nofollow"
+                  >Search book</button>
+                </Link>
               </div>
-              <Link href="/search">
-                <Button className={styles.buttonAction}>Search book</Button>
-              </Link>
-              <Link href="/login">
-                <Button className={styles.buttonAction}>Login</Button>
-              </Link>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              style={{ width: '100%', height: '85vh' }}
-              className="d-block"
-              src="/image/image-slider1.jpg"
-              alt="Second slide"
-            />
-            <Carousel.Caption>
-              <div className={styles.sliderLabel}>
-                <h5>Tra cứu sách nhanh chóng</h5>
-                <p></p>
-              </div>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              style={{ width: '100%', height: '85vh' }}
-              className="d-block"
-              src="/image/image-slider1.jpg"
-              alt="Third slide"
-            />
-            <Carousel.Caption>
-              <div className={styles.sliderLabel}>
-                <h5>Đơn giản, dễ dàng sử dụng</h5>
-                <p>Tuân theo các quy trình, nghiệp vụ, các chuẩn của thư viện trường học từ khâu nhập sách, thanh lý sách, quản lý độc giả.</p>
-              </div>
-            </Carousel.Caption>
-          </Carousel.Item>
-        </Carousel>
+            </div>
+          </div>
+        </div>
       </main>
       <Footer />
     </>

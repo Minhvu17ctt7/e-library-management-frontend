@@ -1,7 +1,8 @@
 import axios from 'axios';
 import queryString from 'query-string';
 
-const BASE_URL = "https://e-library-management-mhh.herokuapp.com"
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:1337';
+
 
 const axiosClient = axios.create({
     baseURL: BASE_URL,
