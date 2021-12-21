@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { Container } from 'react-bootstrap'
+import Head from 'next/head'
 import Footer from './Footer'
 import Header from './Header'
 import Sidebar from './Sidebar'
@@ -12,6 +12,11 @@ const Layout = (props) => {
         //     <Footer />
         // </Container>
         <Fragment>
+          <Head>
+            <title>
+              E-Library-Management
+            </title>
+          </Head>
             <Header />
             <div className="container-fluid">
                 <div className="row" style={{ minHeight: '85vh' }}>

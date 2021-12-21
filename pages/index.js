@@ -11,6 +11,11 @@ import Link from "next/link";
 export default function Home() {
   return (
     <>
+      <Head>
+        <title>
+          E-Library-Management
+        </title>
+      </Head>
       <Header />
       <main style={{ height: '85vh' }} className="d-flex ">
         <div
