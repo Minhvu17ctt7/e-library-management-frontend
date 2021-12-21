@@ -8,12 +8,13 @@ import BookSearchForm from 'component/book/bookSearchForm'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { Fragment, useEffect, useState } from 'react'
-import { Button } from 'react-bootstrap'
+import { Button, Table } from 'react-bootstrap'
 import NoData from 'component/NoData'
 
 const initFilterState = {
     'name_contains': null,
-    'author.name_contains': null
+    'author.name_contains': null,
+    'category.id': null
 };
 
 const Books = () => {
@@ -42,7 +43,7 @@ const Books = () => {
             const books = await bookApi.getBooks({ "_start": start, _sort: 'id:ASC', ...filter });
             setBooks(books)
             //Tính tổng page
-            const numberOfBooks = await bookApi.countBook();
+            const numberOfBooks = await bookApi.countBook(filter);
             const totalPage = Math.ceil(numberOfBooks / 4)
             setTotalPage(totalPage)
             setLoading(false)
@@ -99,24 +100,27 @@ const Books = () => {
             {loading && <Loading />}
             <Layout>
                 <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Books</h1>
-                <BookSearchForm
-                  setSearchFilter={setFilter}
-                />
-                <div className = "d-flex justify-content-end">
+                <div className = "d-flex justify-content-end mb-3">
                     <Link href="/manage/books/create">
                         <Button className="btn btn-primary">Create book</Button>
                     </Link>
                 </div>
+                <BookSearchForm
+                  setSearchFilter={setFilter}
+                />
                 {books && books.length <= 0 && !loading && <NoData />}
-                {books && !!books.length && (<table className="table align-middle">
+                {books && !!books.length && (
+                  // <table className="table align-middle">
+                  <Table striped bordered hover>
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Image</th>
                             <th scope="col">Name</th>
                             <th scope="col">Author</th>
+                            <th scope="col">Category</th>
                             <th scope="col">Remain</th>
-                            <th></th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -129,6 +133,7 @@ const Books = () => {
                                 </th>
                                 <td>{book.name}</td>
                                 <td>{book.author.name}</td>
+                                <td>{book.category.name}</td>
                                 <td>{book.remain}</td>
                                 <td onClick={(e) => e.stopPropagation()}>
                                     <Link href={`/manage/books/update/${book.id}`}>
@@ -143,7 +148,7 @@ const Books = () => {
                             </tr>
                         ))}
                     </tbody>
-                </table>)}
+                </Table>)}
                 {!!books?.length && (
                     <nav aria-label="Page navigation">
                         <ul className="pagination">

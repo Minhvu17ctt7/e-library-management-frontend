@@ -33,8 +33,16 @@ const bookApi = {
         return axiosClient.get("/providers");
     },
 
-    countBook: () => {
-        return axiosClient.get('/books/count');
+    countBook: async (filter) => {
+        const keys = Object.keys(filter);
+        let params = keys.reduce((acc, key) => {
+            const value = filter[key];
+            if (value) {
+                return `${acc}&${key}=${value}`;
+            }
+            return acc;
+        }, '');
+        return await axiosClient.get(`/books/count?${params}`);
     },
 
     createBook: (data, file) => {

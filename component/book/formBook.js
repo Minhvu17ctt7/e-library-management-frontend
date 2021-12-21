@@ -207,7 +207,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
                             <Button type="submit" class="btn btn-primary m-2" disabled={loading}>
                                 {book ? "Update" : "Create"}
                             </Button>
-                            <button type="button" class="btn btn-secondary m-2" onClick={() => router.push("/management/books")}>Cancel</button>
+                            <button type="button" class="btn btn-secondary m-2" onClick={() => router.push("/manage/books")}>Cancel</button>
                         </div>
                     </div>
                 </form>
