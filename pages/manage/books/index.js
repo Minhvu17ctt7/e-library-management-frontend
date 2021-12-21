@@ -4,11 +4,17 @@ import Layout from 'component/Layout/Layout'
 import Loading from 'component/Loading/Loading'
 import ModalDeleteBook from 'component/modal/DeleteBook'
 import ModalNotify from 'component/modal/NotifyModal'
+import BookSearchForm from 'component/book/bookSearchForm'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { Fragment, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import NoData from 'component/NoData'
+
+const initFilterState = {
+    'name_contains': null,
+    'author.name_contains': null
+};
 
 const Books = () => {
     const router = useRouter();
@@ -20,17 +26,20 @@ const Books = () => {
     const [totalPage, setTotalPage] = useState();
     const [loading, setLoading] = useState(false)
     const [hasOnChange, setHasOnChange] = useState(false);
+    const [filter, setFilter] = useState(initFilterState);
     const start = page === 1 ? 0 : (page - 1) * 4;
 
     const selectDocumentHandler = () => {
         setHasOnChange(preState => !preState);
     };
-
+    useEffect(() => {
+        handleClickPagination(1);
+    }, [filter]);
     useEffect(() => {
         (async () => {
             setLoading(true);
             //Lấy sách theo page, vì strapi version 3. chưa hỗ trợ pagination nên phải làm theo cách start, limit
-            const books = await bookApi.getBooks({ "_start": start });
+            const books = await bookApi.getBooks({ "_start": start, _sort: 'id:ASC', ...filter });
             setBooks(books)
             //Tính tổng page
             const numberOfBooks = await bookApi.countBook();
@@ -38,7 +47,7 @@ const Books = () => {
             setTotalPage(totalPage)
             setLoading(false)
         })()
-    }, [page, hasOnChange])
+    }, [page, hasOnChange, filter])
 
     //handle open và close modal hỏi xem có muốn xóa sách hay k
     const handleCloseModalDelete = () => setShowModalDelete(false);
@@ -75,7 +84,7 @@ const Books = () => {
         return books.find(book => id === book.id).transaction_details.length > 0;
     }
 
-    //Hiện item pagination 
+    //Hiện item pagination
     const itemPagination = () => {
 
         let list = [];
@@ -90,11 +99,16 @@ const Books = () => {
             {loading && <Loading />}
             <Layout>
                 <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Books</h1>
-                <Link href="/manage/books/create">
-                    <Button className="btn btn-primary">Create book</Button>
-                </Link>
+                <BookSearchForm
+                  setSearchFilter={setFilter}
+                />
+                <div className = "d-flex justify-content-end">
+                    <Link href="/manage/books/create">
+                        <Button className="btn btn-primary">Create book</Button>
+                    </Link>
+                </div>
                 {books && books.length <= 0 && !loading && <NoData />}
-                {books && (<table className="table align-middle">
+                {books && !!books.length && (<table className="table align-middle">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
@@ -107,11 +121,11 @@ const Books = () => {
                     </thead>
                     <tbody>
                         {books.map(book => (
-                            <tr key={book.id} onClick={() => router.push(`/manage/books/${book.id}`)}>
+                            <tr key={book.id} onClick={() => router.push(`/manage/books/${book.id}`)} style={{ cursor: 'pointer' }}>
                                 <th scope="row">{book.id}</th>
                                 <th scope="row">
                                     <img src={book.photo ? `${BASE_URL}${book.photo.url}` : "/image/thumbnail.png"} className="img-thumbnail rounded-3"
-                                        style={{ width: "100px" }} alt="thumbnail" />
+                                        style={{ width: "100px" }} alt={book.name} />
                                 </th>
                                 <td>{book.name}</td>
                                 <td>{book.author.name}</td>
@@ -130,7 +144,7 @@ const Books = () => {
                         ))}
                     </tbody>
                 </table>)}
-                {books && (
+                {!!books?.length && (
                     <nav aria-label="Page navigation">
                         <ul className="pagination">
                             <li className={page <= 1 ? 'page-item disabled' : 'page-item'}
