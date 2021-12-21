@@ -46,7 +46,7 @@ const BookSearchForm = ({setSearchFilter}) => {
           onKeyDown={onKeyDownHandler}
         />
       </Col>
-      <Col>
+      <Col sm={2}>
         <Form.Select
           value={filter ? filter['category.id'] : ''}
           onChange={(e) => updateFilter('category.id', e.target.value)}
