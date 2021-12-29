@@ -2,7 +2,7 @@ import axiosClient from "./axiosClients";
 
 
 const bookApi = {
-    getBooks: async (query) => {
+    getBooks: async (query, limit = 4) => {
         const keys = Object.keys(query);
         let params = keys.reduce((acc, key) => {
             const value = query[key];
@@ -11,8 +11,7 @@ const bookApi = {
             }
             return acc;
         }, '');
-        const url = `/books?_limit=4&${params}`;
-        console.log("url..", url)
+        const url = `/books?_limit=${limit}&${params}`;
         return axiosClient.get(url);
     },
 
@@ -44,7 +43,22 @@ const bookApi = {
         }, '');
         return await axiosClient.get(`/books/count?${params}`);
     },
+    countBook2: (query) => {
+        const url = '/books/count';
+        if (query != null) {
+            const keys = Object.keys(query);
+            let params = keys.reduce((acc, key) => {
+                const value = query[key];
+                if (value) {
+                    return `${acc}&${key}=${value}`;
+                }
+                return acc;
+            }, '');
+            url += `?${params}`
+        }
+        return axiosClient.get(url);
 
+    },
     createBook: (data, file) => {
         const formData = new FormData();
         formData.append('data', JSON.stringify(data));

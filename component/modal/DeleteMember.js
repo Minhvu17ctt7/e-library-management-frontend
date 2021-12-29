@@ -14,7 +14,7 @@ const DeleteMember = ({ showModalDelete, handleCloseModalDelete, idMember }) => 
             <Modal.Header closeButton>
                 <Modal.Title>Delete member?</Modal.Title>
             </Modal.Header>
-            <Modal.Body>You want delete member width id: {idMember}</Modal.Body>
+            <Modal.Body>You want delete member with id: {idMember}</Modal.Body>
             <Modal.Footer>
                 <Button variant="danger" onClick={handleOnDelete}>
                     Delete
