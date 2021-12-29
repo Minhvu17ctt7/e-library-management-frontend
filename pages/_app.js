@@ -14,7 +14,7 @@ function redirectUser(ctx, location) {
     ctx.res.writeHead(302, { Location: location });
     ctx.res.end();
   } else {
-    Router.push(location);
+    useRouter.push(location);
   }
 }
 

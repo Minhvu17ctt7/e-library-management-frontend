@@ -131,7 +131,7 @@ const Books = () => {
                     </tbody>
                 </table>)}
                 {books && (
-                    <nav aria-label="Page navigation">
+                    <nav aria-label="Page navigation" className="d-flex justify-content-center">
                         <ul className="pagination">
                             <li className={page <= 1 ? 'page-item disabled' : 'page-item'}
                                 onClick={() => handleClickPagination(page - 1)}

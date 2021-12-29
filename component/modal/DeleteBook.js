@@ -15,7 +15,7 @@ const DeleteBook = ({ showModalDelete, handleCloseModalDelete, idBook, selectDoc
             <Modal.Header closeButton>
                 <Modal.Title>Delete book?</Modal.Title>
             </Modal.Header>
-            <Modal.Body>You want delete book width id: {idBook}</Modal.Body>
+            <Modal.Body>You want delete book with id: {idBook}</Modal.Body>
             <Modal.Footer>
                 <Button variant="danger" onClick={handleOnDelete}>
                     Delete
