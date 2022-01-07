@@ -16,11 +16,11 @@ const UpdateBook = () => {
         (async () => {
             setLoading(true);
             const id = router.query.id;
-            const categories = await bookApi.getCategories();
+            const members = await bookApi.getMembers();
             const authors = await bookApi.getAuthors();
             const providers = await bookApi.getProviders();
             const book = await bookApi.getBookById(id);
-            setCategories(categories);
+            setCategories(members);
             setProviders(providers);
             setAuthors(authors);
             setBook(book);
@@ -30,7 +30,7 @@ const UpdateBook = () => {
     return (
         <Fragment>
             {loading && <Loading />}
-            {book && <FormBook categories={categories} authors={authors} providers={providers} book={book} />}
+            {book && <FormBook members={members} authors={authors} providers={providers} book={book} />}
         </Fragment>
     )
 }

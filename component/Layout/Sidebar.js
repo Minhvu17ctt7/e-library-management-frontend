@@ -35,9 +35,11 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li>
-                    <a className="nav-link link-dark">
+                    <Link href="/manage/transactions">
+                    <a className={routerPath === "transactions" ? "nav-link link-dark active" : "nav-link link-dark"}>
                         Transaction
                     </a>
+                    </Link>
                 </li>
                 <li>
                     <a className="nav-link link-dark">
