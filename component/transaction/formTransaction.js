@@ -15,13 +15,14 @@ const FormTransaction = ({ members, books, transaction }) => {
     const [srcImage, setSrcImage] = useState();
     //Lưu file để create
     const [fileImage, setFileImage] = useState();
-    console.log("transaction...", transaction)
+    const [onChange, setOnChange] = useState(true);
 
     //Cái formik này để quản lý value input dễ hơn state
     const formik = useFormik({
         initialValues: {
             members: members,
-            books: books
+            books: books,
+            transactionDetails: []
         },
         onSubmit: async (values) => {
             const jwt = Cookies.get("jwt");
@@ -35,7 +36,36 @@ const FormTransaction = ({ members, books, transaction }) => {
             router.replace("/manage/transactions");
         },
     });
-    console.log("formik...", formik.values)
+
+    const hanldeAddBook = () => {
+        formik.values.transactionDetails.push({ book: '', quantity: 0 });
+        setOnChange(statePre => !statePre);
+    }
+
+    const handleRemoveBook = (index) => {
+        let transactionDetails = formik.values.transactionDetails;
+        formik.values.transactionDetails = []
+        for (let i in transactionDetails) {
+            console.log("index...", i != index)
+            console.log("transaction detail...", transactionDetails[i])
+            if (i != index) {
+                console.log("da vao")
+                formik.values.transactionDetails.push(transactionDetails[i]);
+            }
+        }
+        console.log(formik.values.transactionDetails);
+        setOnChange(statePre => !statePre);
+    }
+
+    const handleChangeSelect = (event, index) => {
+        formik.values.transactionDetails[index].book = event.target.value;
+        setOnChange(statePre => !statePre);
+    }
+
+    const handleChangeQuantity = (event, index) => {
+        formik.values.transactionDetails[index].quantity = event.target.value;
+        setOnChange(statePre => !statePre);
+    }
 
     //khi input file change thì gọi để show image preview
     const handleChangePhoto = (e) => {
@@ -76,7 +106,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                     <div className="row mb-4">
                                         <div className="col">
                                             <div className="form-outline">
-                                                <label className="form-label" for="form7Example1">Name member</label>
+                                                <label className="form-label">Name member</label>
                                                 <select name="category" onChange={formik.handleChange}
                                                     defaultValue={formik.values.member}
                                                     className="form-control"
@@ -93,7 +123,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                         <div className="col">
                                             <div className="form-outline">
                                                 <label className="form-label" for="form7Example2">Borrow date</label>
-                                                <input type="date"  name="borrow_date" placeholder="borrow_date"
+                                                <input type="date" name="borrow_date" placeholder="borrow_date"
                                                     onChange={formik.handleChange}
                                                     value={formik.values.borrow_date}
                                                     className="form-control"
@@ -102,25 +132,9 @@ const FormTransaction = ({ members, books, transaction }) => {
                                         </div>
                                     </div>
                                     <div className="row mb-4">
-                                        {/* <div className="col">
-                                            <div className="form-outline">
-                                                <label className="form-label" for="form7Example1">Book</label>
-                                                <select name="category" onChange={formik.handleChange}
-                                                    // value={formik.values.transaction_detail.book.id}
-                                                    className="form-control"
-                                                >
-                                                    <option>Choose book</option>
-                                                    {
-                                                        books?.map(book => (
-                                                            <option key={book.id} value={book.id}>{book.name}</option>
-                                                        ))
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div> */}
                                         <div className="col-6">
                                             <div className="form-outline">
-                                                <label className="form-label" for="form7Example2">Pay date</label>
+                                                <label className="form-label">Pay date</label>
                                                 <input type="date" name="pay_date" placeholder="pay_date"
                                                     onChange={formik.handleChange}
                                                     value={formik.values.pay_date}
@@ -139,56 +153,61 @@ const FormTransaction = ({ members, books, transaction }) => {
                                     <h5 className="mb-0">Sách mượn</h5>
                                 </div>
                                 <div className="card-body">
-                                <div className="row mb-4">
-                                        <div className="col-6">
-                                            <Button type="button" class="btn btn-primary m-2" >
-                                                Thêm sách
-                            </Button>
-                                        </div>
-                                    </div>
                                     <div className="row mb-4">
                                         <div className="col-6">
-                                            <div className="form-outline">
-                                                <label className="form-label" for="form7Example1">Book</label>
-                                                <select name="category" onChange={formik.handleChange}
-                                                    // value={formik.values.transaction_details.book}
-                                                    className="form-control"
-                                                >
-                                                    <option>Choose book</option>
-                                                    {
-                                                        books?.map(book => (
-                                                            <option key={book.id} value={book.id}>{book.name}</option>
-                                                        ))
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="col-4">
-                                            <div className="form-outline">
-                                                <label className="form-label" for="form7Example1">Số lượgn</label>
-                                                <input type="number" name="pay_date" placeholder="pay_date"
-                                                    className="form-control"
-                                                    required />
-                                            </div>
-                                        </div>
-                                        <div className="col-2">
-                                        <i class="bi bi-x-circle"></i>
+                                            <Button type="button" onClick={hanldeAddBook} className="btn btn-primary m-2" >
+                                                Thêm sách
+                                            </Button>
                                         </div>
                                     </div>
-
+                                    {
+                                        formik.values.transactionDetails.map((transactionDetail, index) => (
+                                            <div className="row mb-4" key={index}>
+                                                <div className="col-6">
+                                                    <div className="form-outline">
+                                                        <label className="form-label">Book</label>
+                                                        <select name="book" onChange={(event) => handleChangeSelect(event, index)}
+                                                            value={transactionDetail.book}
+                                                            className="form-control"
+                                                        >
+                                                            <option>Choose book</option>
+                                                            {
+                                                                books?.map(book => (
+                                                                    <option key={book.id} value={book.id}>{book.name}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="col-4">
+                                                    <div className="form-outline">
+                                                        <label className="form-label">Quantity</label>
+                                                        <input type="number" name="pay_date" placeholder="Quantity"
+                                                            value={transactionDetail[index]?.quantity}
+                                                            onChange={(event) => handleChangeQuantity(event, index)}
+                                                            className="form-control"
+                                                            required />
+                                                    </div>
+                                                </div>
+                                                <div className="col-2">
+                                                    <i className="bi bi-x-circle" onClick={() => handleRemoveBook(index)}></i>
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 mb-4 text-center">
-                            <Button type="submit" class="btn btn-primary m-2" disabled={loading}>
+                            <Button type="submit" className="btn btn-primary m-2" disabled={loading}>
                                 {transaction ? "Update" : "Create"}
                             </Button>
-                            <button type="button" class="btn btn-secondary m-2" onClick={() => router.push("/manage/transactions")}>Cancel</button>
+                            <button type="button" className="btn btn-secondary m-2" onClick={() => router.push("/manage/transactions")}>Cancel</button>
                         </div>
                     </div>
                 </form>
             </Layout>
-        </Fragment>
+        </Fragment >
     )
 }
 

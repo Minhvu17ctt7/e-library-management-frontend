@@ -23,7 +23,7 @@ const Login = () => {
         Cookies.set("jwt", res.jwt);
         Cookies.set("user", JSON.stringify(res.user));
         Cookies.set("isLoggedIn", true)
-        router.replace("/manage")
+        router.replace("/manage/books")
       } catch (error) {
         setLoading(false);
         setError(true);

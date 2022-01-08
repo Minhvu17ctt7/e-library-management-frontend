@@ -27,7 +27,7 @@ const Header = () => {
       <div className="container-fluid">
         <Row>
           <Col xs={2} className="d-flex align-items-center">
-            <a href={isLoggedIn ? "/manage" : "/"}>
+            <a href={isLoggedIn ? "/manage/books" : "/"}>
               <h6 className='m-auto'>E-LIBRARY-MANAGEMENT</h6>
             </a>
           </Col>

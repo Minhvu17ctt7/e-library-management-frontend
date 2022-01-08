@@ -15,7 +15,6 @@ const FormBook = ({ authors, categories, providers, book }) => {
     const [srcImage, setSrcImage] = useState();
     //Lưu file để create
     const [fileImage, setFileImage] = useState();
-    console.log("book...", book)
 
     //Cái formik này để quản lý value input dễ hơn state
     const formik = useFormik({
@@ -41,7 +40,6 @@ const FormBook = ({ authors, categories, providers, book }) => {
             router.replace("/manage/books");
         },
     });
-    console.log("formik...", formik.values)
 
     //khi input file change thì gọi để show image preview
     const handleChangePhoto = (e) => {

@@ -12,14 +12,7 @@ const Sidebar = () => {
                 <span class="fs-4">Sidebar</span>
             </a>
             <hr /> */}
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <Link href="/manage" exact>
-                        <a className={!routerPath ? "nav-link link-dark active" : "nav-link link-dark"}>
-                            Home
-                        </a>
-                    </Link>
-                </li>
+            <ul className="nav nav-pills flex-column mb-auto">
                 <li>
                     <Link href="/manage/books">
                         <a className={routerPath === "books" ? "nav-link link-dark active" : "nav-link link-dark"}>
@@ -36,9 +29,9 @@ const Sidebar = () => {
                 </li>
                 <li>
                     <Link href="/manage/transactions">
-                    <a className={routerPath === "transactions" ? "nav-link link-dark active" : "nav-link link-dark"}>
-                        Transaction
-                    </a>
+                        <a className={routerPath === "transactions" ? "nav-link link-dark active" : "nav-link link-dark"}>
+                            Transaction
+                        </a>
                     </Link>
                 </li>
                 <li>
