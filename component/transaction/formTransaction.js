@@ -189,8 +189,8 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                             required />
                                                     </div>
                                                 </div>
-                                                <div className="col-2">
-                                                    <i className="bi bi-x-circle" onClick={() => handleRemoveBook(index)}></i>
+                                                <div className="col-2" style={{ display: "flex", alignItems: "flex-end" }}>
+                                                    <i className="bi bi-x-circle" style={{ fontSize: "30px" }} onClick={() => handleRemoveBook(index)}></i>
                                                 </div>
                                             </div>
                                         ))
