@@ -21,22 +21,23 @@ const Members = () => {
     const [members, setMembers] = useState();
     const [totalPage, setTotalPage] = useState();
     const [filter, setFilter] = useState(initFilterState);
+    const [sizePage, setSizePage] = useState(3);
     const page = +router.query.page || 1;
-    const start = +page === 1 ? 0 : (+page - 1) * 4;
+    const start = +page === 1 ? 0 : (+page - 1) * sizePage;
 
     useEffect(() => {
         handleClickPagination(1);
     }, [filter]);
     useEffect(() => {
         (async () => {
-            const members = await memberApi.getMembers( {"_start": start, _sort: 'id:ASC', ...filter });
+            const members = await memberApi.getMembers(sizePage, {"_start": start, _sort: 'id:ASC', ...filter });
             setMembers(members);
             //Tính tổng page
             const numberOfMovies = await memberApi.countMember(filter);
-            const totalPage = Math.ceil(numberOfMovies / 4);
+            const totalPage = Math.ceil(numberOfMovies / sizePage);
             setTotalPage(totalPage);
         })()
-    }, [page, filter])
+    }, [page, filter, sizePage])
 
     const handleCloseModalDelete = () => setShowModalDelete(false);
     const handleShowModalDelete = () => {
@@ -54,6 +55,7 @@ const Members = () => {
         }
         router.push(`/manage/members?page=${pageNext}`);
     }
+
     //Hiện item pagination
     const itemPagination = () => {
         let list = [];
@@ -76,6 +78,18 @@ const Members = () => {
             <MemberSearchForm
               setSearchFilter={setFilter}
             />
+            <label style={{marginBottom: "10px"}}>
+            Items per page: 
+            <select value={sizePage} onChange={(e) => {
+                setSizePage(e.target.value);
+                console.log(e.target.value);
+                }} >
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="30">30</option>
+                </select>
+            </label>
             {members && (
               <Table striped bordered hover>
                 <thead className="thead-light">
@@ -107,7 +121,8 @@ const Members = () => {
                     ))}
                 </tbody>
             </Table>)}
-            {members && (<nav aria-label="Page navigation example">
+            {members && (
+            <nav aria-label="Page navigation"  className="d-flex justify-content-center">
                 <ul className="pagination">
                     <li className={page <= 1 ? 'page-item disabled' : 'page-item'}
                         onClick={() => handleClickPagination(page - 1)}

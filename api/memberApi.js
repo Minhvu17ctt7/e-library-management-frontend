@@ -2,7 +2,7 @@ import axiosClient from "./axiosClients";
 
 
 const memberApi = {
-    getMembers: async (query) => {
+    getMembers: async (sizePage, query) => {
         const keys = Object.keys(query);
         let params = keys.reduce((acc, key) => {
             const value = query[key];
@@ -11,7 +11,7 @@ const memberApi = {
             }
             return acc;
         }, '');
-        const url = `/members?_limit=4&${params}`;
+        const url = `/members?_limit=${sizePage}&${params}`;
         return axiosClient.get(url);
     },
 
