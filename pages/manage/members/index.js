@@ -58,7 +58,7 @@ const Members = () => {
     const itemPagination = () => {
         let list = [];
         for (let i = 0; i < totalPage; i++) {
-            list.push(<li key={i} className="page-item" onClick={() => handleClickPagination(i + 1)}><a className="page-link">{i + 1}</a></li>)
+            list.push(<li key={i} className={page === (i + 1) ? "page-item active" : "page-item"} onClick={() => handleClickPagination(i + 1)}><a className="page-link">{i + 1}</a></li>)
         }
         return list;
     }
