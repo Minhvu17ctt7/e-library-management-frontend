@@ -1,14 +1,18 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import memberApi from 'api/memberApi'
 import Layout from 'component/Layout/Layout'
-import { Form, Row, Col, Button } from 'react-bootstrap'
+import { Form, Button, Alert  } from 'react-bootstrap'
 import { BASE_URL } from 'api/axiosClients'
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import * as Yup from "yup";
+import Loading from 'component/Loading/Loading';
+import styles from "styles/Member.module.css";
 
 const FormMember = ({ member }) => {
     const router = useRouter();
+    const [loading, setLoading] = useState(false)
     //Lưu src để hiện image preview khi chọn image
     const [srcImage, setSrcImage] = useState();
     //Lưu file để create
@@ -17,13 +21,30 @@ const FormMember = ({ member }) => {
     //Cái formik này để quản lý value input dễ hơn state
     const formik = useFormik({
         initialValues: {
+            code: member?.code,
             name: member?.name,
             address: member?.address,
             email: member?.email,
             phone: member?.phone,
 
         },
+        validationSchema: Yup.object({
+            code: Yup.string()
+              .required("Required!"),
+            name: Yup.string()
+              .min(8, "Minimum 8 characters")
+              .required("Required!"),
+            address: Yup.string()
+              .min(8, "Minimum 8 characters")
+              .required("Required!"),
+            email: Yup.string()
+              .email("Invalid email format")
+              .required("Required!"),
+            phone: Yup.string().matches(new RegExp('[0-9]{7}'))
+              .required("Required!"),
+          }),
         enableReinitialize: true,
+
         onSubmit: async (values) => {
             const jwt = Cookies.get("jwt");
             if (member) {
@@ -55,108 +76,105 @@ const FormMember = ({ member }) => {
     }
 
     return (
-        <Layout>
+        <Fragment>
+            {loading && <Loading />}
+            <Layout>
             <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">{
                 member ? `Update member id: ${member.id}` : 'Create member'
             }</h1>
-            <Form onSubmit={formik.handleSubmit}>
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" name="name" onChange={formik.handleChange}
-                            value={formik.values.name} placeholder="Name member" />
-                    </Form.Group>
+            <form onSubmit={formik.handleSubmit}>
+            <div className="row">
+                        <div className="col-md-8 mb-4">
+                            <div className="card mb-4">
+                                <div className="card-header py-3">
+                                    <h5 className="mb-0">Infomation Member</h5>
+                                </div>
+                                <div className="card-body">
 
-                    <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control type="text" name="email" onChange={formik.handleChange}
-                            value={formik.values.email} placeholder="Email" />
-                    </Form.Group>
-                </Row>
+                                    {/* <!-- 2 column grid layout with text inputs for the first and last names --> */}
+                                    <div className="row mb-4">
+                                        <div className="col">
+                                            <div className="form-outline">
+                                                <label className="form-label" for="form7Example1">Code member</label>
+                                                <input type="text" name="code" onChange={formik.handleChange}
+                                                    value={formik.values.code}
+                                                    className="form-control" />
+                                                {formik.errors.code ? (<Alert className={styles.alert} variant='danger'>{formik.errors.code}</Alert>) : null}
+                                                
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                            <div className="form-outline">
+                                                <label className="form-label" for="form7Example1">Name member</label>
+                                                <input type="text" name="name" onChange={formik.handleChange}
+                                                    value={formik.values.name}
+                                                    className="form-control" />
+                                                {formik.errors.name ? (<Alert className={styles.alert} variant='danger'>{formik.errors.name}</Alert>) : null}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row mb-4">
+                                        <div className="col">
+                                            <div className="form-outline">
+                                                <label className="form-label" for="form7Example1">Address</label>
+                                                <input type="text" name="address" onChange={formik.handleChange}
+                                                    value={formik.values.address}
+                                                    className="form-control" />
+                                                {formik.errors.address ? (<Alert className={styles.alert} variant='danger'>{formik.errors.address}</Alert>) : null}
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                            <div className="form-outline">
+                                                <label className="form-label" for="form7Example1">Email</label>
+                                                <input type="text" name="email" onChange={formik.handleChange}
+                                                    value={formik.values.email}
+                                                    className="form-control" />
+                                                {formik.errors.email ? (<Alert className={styles.alert} variant='danger'>{formik.errors.email}</Alert>) : null}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row mb-4">
+                                        <div className="col">
+                                            <div className="form-outline">
+                                                <label className="form-label" for="form7Example1">Phone</label>
+                                                <input type="text" name="phone" onChange={formik.handleChange}
+                                                    value={formik.values.phone}
+                                                    className="form-control" />
+                                                {formik.errors.phone ? (<Alert className={styles.alert} variant='danger'>{formik.errors.phone}</Alert>) : null}
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                            
+                                        </div>
+                                    </div>
+                                
 
-                <Row className="mb-3">
-                <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Address</Form.Label>
-                        <Form.Control type="text" name="address" onChange={formik.handleChange}
-                            value={formik.values.address} placeholder="Address" />
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Phone</Form.Label>
-                        <Form.Control type="text" name="phone" onChange={formik.handleChange}
-                            value={formik.values.phone} placeholder="Phone" />
-                    </Form.Group>
-                </Row>
+                                </div>
+                            </div>
+                        </div>
 
-                {/* <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridState">
-                        <Form.Label>Author</Form.Label>
-                        <Form.Select name="author" onChange={formik.handleChange}
-                            defaultValue={formik.values.author}
-                        >
-                            <option>Choose author</option>
-                            {
-                                authors?.map(author => (
-                                    <option key={author.id} value={author.id}>{author.name}</option>
-                                ))
-                            }
-                        </Form.Select>
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="formGridState">
-                        <Form.Label>Category</Form.Label>
-                        <Form.Select name="category" onChange={formik.handleChange}
-                            defaultValue={formik.values.category}
-                        >
-                            <option>Choose category</option>
-                            {
-                                categories?.map(category => (
-                                    <option key={category.id} value={category.id}>{category.name}</option>
-                                ))
-                            }
-                        </Form.Select>
-                    </Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                    <Col sm={6}>
-                        <Form.Group controlId="formGridState">
-                            <Form.Label>Provider</Form.Label>
-                            <Form.Select name="provider"
-                                onChange={formik.handleChange}
-                                defaultValue={formik.values.provider}
-                            >
-                                <option>Choose provider</option>
-                                {
-                                    providers?.map(provider => (
-                                        <option key={provider.id} value={provider.id}>{provider.name}</option>
-                                    ))
-                                }
-                            </Form.Select>
-                        </Form.Group>
-                    </Col>
-                </Row> */}
-                <Row>
-                    {/* <Col>
-                        <Form.Control
-                            as="textarea"
-                            placeholder="Description members"
-                            name="description"
-                            onChange={formik.handleChange}
-                            value={formik.values.description}
-                        />
-                    </Col> */}
-                    <Col>
-                        <Form.Group controlId="formFileLg" className="mb-3">
-                            <img src={srcImagePhoto()} alt="image-member" />
-                            <Form.Control type="file" name="photo" onChange={handleChangePhoto} />
-                        </Form.Group>
-                    </Col>
-                </Row>
-
-                <Button variant="primary" type="submit">
-                    {member ? "Update" : "Create"}
-                </Button>
-            </Form>
+                        <div className="col-md-4 mb-4">
+                            <div className="card mb-4">
+                                <div className="card-header py-3">
+                                    <h5 className="mb-0">Image</h5>
+                                </div>
+                                <div className="card-body text-center">
+                                    <img src={srcImagePhoto()}
+                                        className="img-fluid rounded rounded-left mb-2" alt="Thumbnail-book" style={{ width: "200px" }} />
+                                    <Form.Control type="file" name="photo" onChange={handleChangePhoto} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 mb-4 text-center">
+                            <Button type="submit" class="btn btn-primary m-2" disabled={loading}>
+                                {member ? "Update" : "Create"}
+                            </Button>
+                            <button type="button" class="btn btn-secondary m-2" onClick={() => router.push("/manage/members")}>Cancel</button>
+                        </div>
+                    </div>
+            </form>
         </Layout>
+        </Fragment>
     )
 }
 

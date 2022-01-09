@@ -58,7 +58,7 @@ const Members = () => {
     const itemPagination = () => {
         let list = [];
         for (let i = 0; i < totalPage; i++) {
-            list.push(<li key={i} className="page-item" onClick={() => handleClickPagination(i + 1)}><a className="page-link">{i + 1}</a></li>)
+            list.push(<li key={i} className={page === (i + 1) ? "page-item active" : "page-item"} onClick={() => handleClickPagination(i + 1)}><a className="page-link">{i + 1}</a></li>)
         }
         return list;
     }
@@ -80,18 +80,18 @@ const Members = () => {
               <Table striped bordered hover>
                 <thead className="thead-light">
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Phone</th>
+                        <th scope="col">CODE</th>
+                        <th scope="col">NAME</th>
+                        <th scope="col">EMAIL</th>
+                        <th scope="col">ADDRESS</th>
+                        <th scope="col">PHONE</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {members.map(member => (
                         <tr key={member.id} onClick={() => router.push(`/manage/members/${member.id}`)}  style={{ cursor: 'pointer' }}>
-                            <th scope="row">{member.id}</th>
+                            <th scope="row">{member.code}</th>
                             <td>{member.name}</td>
                             <td>{member.email}</td>
                             <td>{member.address}</td>
