@@ -1,6 +1,5 @@
 .alert {
-    padding: 0;
-    margin-bottom: 0;
-    margin-top: 5px;
+    color: red;
+    margin-left: 10px;
 }
 

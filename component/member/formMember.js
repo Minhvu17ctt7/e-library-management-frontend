@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import memberApi from 'api/memberApi'
 import Layout from 'component/Layout/Layout'
-import { Form, Button, Alert  } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import { BASE_URL } from 'api/axiosClients'
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -43,6 +43,21 @@ const FormMember = ({ member }) => {
             phone: Yup.string().matches(new RegExp('[0-9]{7}'))
               .required("Required!"),
           }),
+        //   validate:Yup.object({
+        //     code: Yup.string()
+        //       .required("Required!"),
+        //     name: Yup.string()
+        //       .min(8, "Minimum 8 characters")
+        //       .required("Required!"),
+        //     address: Yup.string()
+        //       .min(8, "Minimum 8 characters")
+        //       .required("Required!"),
+        //     email: Yup.string()
+        //       .email("Invalid email format")
+        //       .required("Required!"),
+        //     phone: Yup.string().matches(new RegExp('[0-9]{7}'))
+        //       .required("Required!"),
+        //   }),
         enableReinitialize: true,
 
         onSubmit: async (values) => {
@@ -55,6 +70,37 @@ const FormMember = ({ member }) => {
             router.replace("/manage/members");
         },
     });
+
+    // const validate = (values) => {
+    //     let errors = {};
+    //     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    //     const phone = /^[0-9]{7}/i;
+    //     if(!formik.values.code){
+    //         errors.code = "Code must not be empty"
+    //     }
+
+    //     if(!formik.values.name){
+    //         errors.name = "Name must not be empty"
+    //     }
+
+    //     if(!formik.values.address){
+    //         errors.address = "Address must not be empty"
+    //     }
+
+    //     if(!formik.values.email){
+    //         errors.email = "Email must not be empty"
+    //     } else if (!regex.test(formik.values.email)) {
+    //         errors.email = "Invalid email format";
+    //     }
+
+    //     if(!formik.values.phone){
+    //         errors.phone = "Phone must not be empty"
+    //     } else if (!phone.test(formik.values.phone)) {
+    //         errors.phone = "Invalid phone";
+    //     }
+
+    //     return errors;
+    //   };
 
     //khi input file change thì gọi để show image preview
     const handleChangePhoto = (e) => {
@@ -99,7 +145,7 @@ const FormMember = ({ member }) => {
                                                 <input type="text" name="code" onChange={formik.handleChange}
                                                     value={formik.values.code}
                                                     className="form-control" />
-                                                {formik.errors.code ? (<Alert className={styles.alert} variant='danger'>{formik.errors.code}</Alert>) : null}
+                                                {formik.errors.code ? (<div className={styles.alert}>{formik.errors.code}</div>) : null}
                                                 
                                             </div>
                                         </div>
@@ -109,7 +155,7 @@ const FormMember = ({ member }) => {
                                                 <input type="text" name="name" onChange={formik.handleChange}
                                                     value={formik.values.name}
                                                     className="form-control" />
-                                                {formik.errors.name ? (<Alert className={styles.alert} variant='danger'>{formik.errors.name}</Alert>) : null}
+                                                {formik.errors.name ? (<div className={styles.alert}>{formik.errors.name}</div>) : null}
                                             </div>
                                         </div>
                                     </div>
@@ -120,7 +166,7 @@ const FormMember = ({ member }) => {
                                                 <input type="text" name="address" onChange={formik.handleChange}
                                                     value={formik.values.address}
                                                     className="form-control" />
-                                                {formik.errors.address ? (<Alert className={styles.alert} variant='danger'>{formik.errors.address}</Alert>) : null}
+                                                {formik.errors.address ? (<div className={styles.alert}>{formik.errors.address}</div>) : null}
                                             </div>
                                         </div>
                                         <div className="col">
@@ -129,7 +175,7 @@ const FormMember = ({ member }) => {
                                                 <input type="text" name="email" onChange={formik.handleChange}
                                                     value={formik.values.email}
                                                     className="form-control" />
-                                                {formik.errors.email ? (<Alert className={styles.alert} variant='danger'>{formik.errors.email}</Alert>) : null}
+                                                {formik.errors.email ? (<div className={styles.alert}>{formik.errors.email}</div>) : null}
                                             </div>
                                         </div>
                                     </div>
@@ -140,7 +186,7 @@ const FormMember = ({ member }) => {
                                                 <input type="text" name="phone" onChange={formik.handleChange}
                                                     value={formik.values.phone}
                                                     className="form-control" />
-                                                {formik.errors.phone ? (<Alert className={styles.alert} variant='danger'>{formik.errors.phone}</Alert>) : null}
+                                                {formik.errors.phone ? (<div className={styles.alert}>{formik.errors.phone}</div>) : null}
                                             </div>
                                         </div>
                                         <div className="col">
