@@ -3,12 +3,12 @@
   background-color: #0d6efd;
 }
 
-
 .sidebarContainer {
   position: fixed;
-  width: 220px;
+  width: 250px;
   height: 100%;
   left: 0;
+  margin-top: 50px;
   overflow-x: hidden;
   overflow-y: auto;
   background: #1a1a1a;
@@ -61,7 +61,7 @@
 .sidebarNavigation li::before {
   background-color: #0d6efd;
   position: absolute;
-  content: '';
+  content: "";
   height: 100%;
   left: 0;
   top: 0;
@@ -69,6 +69,10 @@
   transition: width 0.2s ease-in;
   width: 3px;
   z-index: -1;
+}
+
+.sidbarActive {
+  background-color: #0d6efd;
 }
 
 .sidebarNavigation li:hover::before {

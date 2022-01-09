@@ -17,7 +17,7 @@ export default function Home() {
         </title>
       </Head>
       <Header />
-      <main style={{ height: '85vh' }} className="d-flex ">
+      <main style={{ minHeight: '95vh' }} className="d-flex ">
         <div
           id="intro-example"
           className="text-center img-fluid w-100"

@@ -68,7 +68,7 @@ export default function Search() {
         <>
             {loading && <Loading />}
             <Header />
-            <main style={{ height: '85vh' }}>
+            <main style={{ minHeight: '95vh', marginTop: '80px' }}>
                 <Form className="d-inline" onSubmit={handleSearch}>
                     <Form.Group className="w-25 mx-5 my-3">
                         <Form.Label>Tra cứu sách</Form.Label>

@@ -12,18 +12,18 @@ const Layout = (props) => {
         //     <Footer />
         // </Container>
         <Fragment>
-          <Head>
-            <title>
-              E-Library-Management
-            </title>
-          </Head>
+            <Head>
+                <title>
+                    E-Library-Management
+                </title>
+            </Head>
             <Header />
             <div className="container-fluid">
-                <div className="row" style={{ minHeight: '85vh' }}>
+                <div className="row" style={{ minHeight: '95vh' }}>
                     <nav className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse p-0">
                         <Sidebar />
                     </nav>
-                    <main className="col-md-9 ms-sm-auto col-lg-10 p-5">
+                    <main className="col-md-9 ms-sm-auto col-lg-10 p-5" style={{ marginTop: '40px' }}>
                         {props.children}
                     </main>
                 </div>

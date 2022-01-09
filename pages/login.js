@@ -5,6 +5,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { Spinner } from "react-bootstrap";
+import * as Yup from 'yup';
+
+const LoginSchema = Yup.object({
+  identifier: Yup.string()
+    .required('Required'),
+  password: Yup.string()
+    .required('Required'),
+});
+
 
 const Login = () => {
   const [error, setError] = useState();
@@ -15,6 +24,7 @@ const Login = () => {
       identifier: '',
       password: '',
     },
+    validationSchema: LoginSchema,
     onSubmit: async (values) => {
       try {
         setLoading(true);
@@ -23,7 +33,7 @@ const Login = () => {
         Cookies.set("jwt", res.jwt);
         Cookies.set("user", JSON.stringify(res.user));
         Cookies.set("isLoggedIn", true)
-        router.replace("/manage")
+        router.replace("/manage/books")
       } catch (error) {
         setLoading(false);
         setError(true);
@@ -49,6 +59,13 @@ const Login = () => {
                   value={formik.values.identifier}
 
                 />
+                {formik.errors.identifier && (<p style={{
+                  color: "red",
+                  marginLeft: "10px"
+                }}>
+                  {formik.errors.identifier}
+                </p>)}
+
               </div>
 
               {/* <!-- Password input --> */}
@@ -59,6 +76,12 @@ const Login = () => {
                   onChange={formik.handleChange}
                   value={formik.values.password}
                 />
+                {formik.errors.password && (<p style={{
+                  color: "red",
+                  marginLeft: "10px"
+                }}>
+                  {formik.errors.password}
+                </p>)}
               </div>
               {error && <p className="text-danger text-center">Username or password invalid</p>}
               {/* <!-- Submit button --> */}
