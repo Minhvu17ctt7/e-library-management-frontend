@@ -24,7 +24,6 @@ const TransactionDetail = () => {
             setLoading(false)
         })()
     }, [])
-    console.log(transaction);
     return (
         <Fragment> {loading && <Loading />} <Layout>
             {transaction && <div className="container my-5">

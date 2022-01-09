@@ -31,12 +31,13 @@ const TransactionSearchForm = ({setSearchFilter}) => {
       <Col sm={3}>
         <Form.Control
           type="text"
-          placeholder="Name"
-          value={filter ? filter['name_contains'] : ''}
-          onChange={(e) => updateFilter('name_contains', e.target.value)}
+          placeholder="Member"
+          value={filter ? filter['member.name_contains'] : ''}
+          onChange={(e) => updateFilter('member.name_contains', e.target.value)}
           onKeyDown={onKeyDownHandler}
         />
       </Col>
+      
       <Col>
         <Button variant="outline-success" className="mx-2" onClick={onClear}>Clear</Button>
         <Button variant="success" onClick={onSubmit}>Submit</Button>

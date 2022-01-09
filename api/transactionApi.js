@@ -72,16 +72,40 @@ const transactionApi = {
         return axiosClient.post('/transactions', formData);
     },
 
-    updateTransaction: (data, file, id) => {
+    createTransactionDetail: (data, file) => {
         const formData = new FormData();
         formData.append('data', JSON.stringify(data));
         if (file) {
             formData.append('files.photo', file);
         }
+        return axiosClient.post('/transaction-details', formData);
+    },
+
+    updateTransaction: (data, file, id) => {
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(data));
+        console.log(formData);
+        if (file) {
+            formData.append('files.photo', file);
+        }
         return axiosClient.put(`/transactions/${id}`, formData);
+    },
+
+    updateTransactionDetail: (data, file, id) => {
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(data));
+        console.log(formData);
+        if (file) {
+            formData.append('files.photo', file);
+        }
+        return axiosClient.put(`/transaction-details/${id}`, formData);
     },
     deleteTransaction: (id) => {
         const url = `/transactions/${id}`;
+        return axiosClient.delete(url);
+    },
+    deleteTransactionDetail: (id) => {
+        const url = `/transaction-details/${id}`;
         return axiosClient.delete(url);
     }
 }

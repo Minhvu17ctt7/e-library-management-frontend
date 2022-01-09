@@ -20,17 +20,52 @@ const FormTransaction = ({ members, books, transaction }) => {
     //Cái formik này để quản lý value input dễ hơn state
     const formik = useFormik({
         initialValues: {
+            member: transaction?.member.id,
+            pay_date: transaction?.pay_date,
+            borrow_date: transaction?.borrow_date,
+            appointment_date: transaction?.appointment_date,
             members: members,
             books: books,
-            transactionDetails: []
+            transactionDetails: transaction?transaction.transaction_details : ''
         },
         onSubmit: async (values) => {
             const jwt = Cookies.get("jwt");
             setLoading(true);
             if (transaction) {
                 await transactionApi.updateTransaction(values, fileImage, transaction.id, jwt);
-            } else {
-                await transactionApi.createTransaction(values, fileImage, jwt);
+                var idUpdate = [];
+                for(let transaction_detail of values.transactionDetails) {
+                    var data = {
+                        book: transaction_detail.book,
+                        quantity: transaction_detail.quantity,
+                        transaction: transaction.id
+                    }
+                    if(typeof transaction_detail.id !== 'undefined'){
+                        idUpdate.push(transaction_detail.id);
+                        await transactionApi.updateTransactionDetail(data, fileImage, transaction_detail.id, jwt);
+                    } else{
+                        await transactionApi.createTransactionDetail(data, fileImage, jwt);
+                        
+                    }
+                }
+                for(let transactionDetail of transaction.transaction_details) {
+                    if(!idUpdate.includes(transactionDetail.id)){
+                        await transactionApi.deleteTransactionDetail(transactionDetail.id)
+                    }
+                }
+
+            } 
+            else {
+                var transactionCreate = await transactionApi.createTransaction(values, fileImage, jwt);
+                
+                for(let transaction_detail of values.transactionDetails) {
+                    var data = {
+                        book: transaction_detail.book,
+                        quantity: transaction_detail.quantity,
+                        transaction: transactionCreate.id
+                    }
+                    await transactionApi.createTransactionDetail(data, fileImage, jwt);
+                }
             }
             setLoading(false)
             router.replace("/manage/transactions");
@@ -38,7 +73,13 @@ const FormTransaction = ({ members, books, transaction }) => {
     });
 
     const hanldeAddBook = () => {
-        formik.values.transactionDetails.push({ book: '', quantity: 0 });
+        if(typeof formik.values.transactionDetail !== "undefined"){
+            formik.values.transactionDetails.push({ book: '', quantity: 0 });
+        }
+        else {
+            formik.values.transactionDetails = [{ book: '', quantity: 0 }];
+        }
+        
         setOnChange(statePre => !statePre);
     }
 
@@ -49,11 +90,9 @@ const FormTransaction = ({ members, books, transaction }) => {
             console.log("index...", i != index)
             console.log("transaction detail...", transactionDetails[i])
             if (i != index) {
-                console.log("da vao")
                 formik.values.transactionDetails.push(transactionDetails[i]);
             }
         }
-        console.log(formik.values.transactionDetails);
         setOnChange(statePre => !statePre);
     }
 
@@ -66,26 +105,6 @@ const FormTransaction = ({ members, books, transaction }) => {
         formik.values.transactionDetails[index].quantity = event.target.value;
         setOnChange(statePre => !statePre);
     }
-
-    //khi input file change thì gọi để show image preview
-    const handleChangePhoto = (e) => {
-        const file = e.target.files[0];
-        setFileImage(file);
-
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-
-        reader.onloadend = e => {
-            setSrcImage([reader.result])
-        }
-    }
-
-    const srcImagePhoto = () => {
-        if (srcImage) return srcImage;
-        if (transaction?.photo) return `${BASE_URL}${transaction.photo.url}`;
-        return "/image/thumbnail.png"
-    }
-
     return (
         <Fragment>
             {loading && <Loading />}
@@ -107,7 +126,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                         <div className="col">
                                             <div className="form-outline">
                                                 <label className="form-label">Name member</label>
-                                                <select name="category" onChange={formik.handleChange}
+                                                <select name="member" onChange={formik.handleChange}
                                                     defaultValue={formik.values.member}
                                                     className="form-control"
                                                 >
@@ -122,7 +141,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                         </div>
                                         <div className="col">
                                             <div className="form-outline">
-                                                <label className="form-label" for="form7Example2">Borrow date</label>
+                                                <label className="form-label">Borrow date</label>
                                                 <input type="date" name="borrow_date" placeholder="borrow_date"
                                                     onChange={formik.handleChange}
                                                     value={formik.values.borrow_date}
@@ -142,7 +161,18 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                     required />
                                             </div>
                                         </div>
+                                        <div className="col-6">
+                                            <div className="form-outline">
+                                                <label className="form-label">Appointment date</label>
+                                                <input type="date" name="appointment_date" placeholder="appointment_date"
+                                                    onChange={formik.handleChange}
+                                                    value={formik.values.appointment_date}
+                                                    className="form-control"
+                                                    required />
+                                            </div>
+                                        </div>
                                     </div>
+
 
                                 </div>
                             </div>
@@ -161,12 +191,18 @@ const FormTransaction = ({ members, books, transaction }) => {
                                         </div>
                                     </div>
                                     {
-                                        formik.values.transactionDetails.map((transactionDetail, index) => (
+                                        formik.values.transactionDetails && formik.values.transactionDetails.map((transactionDetail, index) => (
+
                                             <div className="row mb-4" key={index}>
+                                                <input type="hidden" name="transaction_details.transaction" placeholder="Quantity"
+                                                    value={transaction?.id}
+                                                    onChange={(event) => handleChangeQuantity(event, index)}
+                                                    className="form-control"
+                                                    required />
                                                 <div className="col-6">
                                                     <div className="form-outline">
                                                         <label className="form-label">Book</label>
-                                                        <select name="book" onChange={(event) => handleChangeSelect(event, index)}
+                                                        <select name="transaction_details.book" onChange={(event) => handleChangeSelect(event, index)}
                                                             value={transactionDetail.book}
                                                             className="form-control"
                                                         >
@@ -182,8 +218,8 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                 <div className="col-4">
                                                     <div className="form-outline">
                                                         <label className="form-label">Quantity</label>
-                                                        <input type="number" name="pay_date" placeholder="Quantity"
-                                                            value={transactionDetail[index]?.quantity}
+                                                        <input type="number" name="transaction_details.quantity" placeholder="Quantity"
+                                                            value={transactionDetail?.quantity}
                                                             onChange={(event) => handleChangeQuantity(event, index)}
                                                             className="form-control"
                                                             required />
