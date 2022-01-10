@@ -102,7 +102,7 @@ const Transactions = () => {
                 <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Transactions</h1>
                 <div className="d-flex justify-content-end mb-3">
                     <Link href="/manage/transactions/create">
-                        <Button className="btn btn-primary">Create transaction</Button>
+                        <Button className="btn btn-primary button-17">Create transaction</Button>
                     </Link>
                 </div>
                 <TransactionSearchForm
@@ -110,34 +110,34 @@ const Transactions = () => {
                 />
                 {transactions && transactions.length <= 0 && !loading && <NoData />}
                 {transactions && !!transactions.length && (
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Member</th>
-                                <th scope="col">Borrowed date</th>
-                                <th scope="col">Pay date</th>
-                                <th scope="col">Transaction appointment date</th>
-                                <th scope="col">Actions</th>
+                    <Table className="table table-container table-bordered" striped bordered hover>
+                        <thead className="td-style gradient-card bigger-card">
+                            <tr className="td-style">
+                                <th className="td-style" scope="col" >ID</th>
+                                <th className="td-style" scope="col">Member</th>
+                                <th className="td-style" scope="col">Borrowed date</th>
+                                <th className="td-style" scope="col">Pay date</th>
+                                <th className="td-style" scope="col">Transaction appointment date</th>
+                                <th className="td-style" scope="col">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="bigger-card">
                             {transactions.map(transaction => (
-                                <tr key={transaction.id} onClick={() => router.push(`/manage/transactions/${transaction.id}`)} style={{ cursor: 'pointer' }}>
-                                    <th scope="row">{transaction.id}</th>
-                                    <th scope="row">
+                                <tr className="td-style" key={transaction.id} onClick={() => router.push(`/manage/transactions/${transaction.id}`)} style={{ cursor: 'pointer' }}>
+                                    <th className="td-style" scope="row">{transaction.id}</th>
+                                    <th className="td-style" scope="row">
                                         {transaction.member.name}
                                     </th>
-                                    <td>{transaction.borrow_date}</td>
-                                    <td>{transaction.pay_date}</td>
-                                    <td>{transaction.appointment_date}</td>
-                                    <td onClick={(e) => e.stopPropagation()}>
+                                    <td className="td-style">{transaction.borrow_date}</td>
+                                    <td className="td-style">{transaction.pay_date}</td>
+                                    <td className="td-style">{transaction.appointment_date}</td>
+                                    <td className="td-style chart-button" onClick={(e) => e.stopPropagation()}>
                                         <Link href={`/manage/transactions/update/${transaction.id}`}>
-                                            <button type="button" className="btn btn-sm px-3 btn-warning">
+                                            <button type="button" className="btn btn-sm px-3 btn-warning button-23">
                                                 <i className="bi bi-pencil-square"></i>
                                             </button>
                                         </Link>
-                                        <button type="button" className="btn btn-danger btn-sm px-3 m-2" onClick={() => handleDeleteTransaction(transaction.id)}>
+                                        <button type="button" className="btn btn-danger btn-sm px-3 m-2 button-23" onClick={() => handleDeleteTransaction(transaction.id)}>
                                             <i className="bi bi-trash"></i>
                                         </button></td>
 
