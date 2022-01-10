@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Container, Row, Col, Form } from 'react-bootstrap';
 import bookApi from 'api/bookApi';
 
-const BookSearchForm = ({setSearchFilter}) => {
+const BookSearchForm = ({ setSearchFilter }) => {
   const [filter, setFilter] = useState(null);
   const [categories, setCategories] = useState(null);
   useEffect(() => {
@@ -12,7 +12,7 @@ const BookSearchForm = ({setSearchFilter}) => {
     })();
   }, []);
   const updateFilter = (key, value) => {
-    setFilter({...filter, [key]: value});
+    setFilter({ ...filter, [key]: value });
   };
   const onClear = () => {
     setFilter(null);
@@ -52,8 +52,8 @@ const BookSearchForm = ({setSearchFilter}) => {
           onChange={(e) => updateFilter('category.id', e.target.value)}
         >
           <option value="" disabled>Category</option>
-          {categories?.map((category) => (
-            <option value={category.id}>{category.name}</option>
+          {categories?.map((category, index) => (
+            <option key={index} value={category.id}>{category.name}</option>
           ))}
         </Form.Select>
       </Col>

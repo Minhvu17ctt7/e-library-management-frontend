@@ -3,14 +3,17 @@ import axiosClient from "./axiosClients";
 
 const transactionApi = {
     getTransactions: async (query, limit = 4) => {
-        const keys = Object.keys(query);
-        let params = keys.reduce((acc, key) => {
-            const value = query[key];
-            if (value) {
-                return `${acc}&${key}=${value}`;
-            }
-            return acc;
-        }, '');
+        let params;
+        if (query) {
+            const keys = Object.keys(query);
+            params = keys.reduce((acc, key) => {
+                const value = query[key];
+                if (value) {
+                    return `${acc}&${key}=${value}`;
+                }
+                return acc;
+            }, '');
+        }
         const url = `/transactions?_limit=${limit}&${params}`;
         return axiosClient.get(url);
     },
@@ -37,14 +40,17 @@ const transactionApi = {
     },
 
     countTransaction: async (filter) => {
-        const keys = Object.keys(filter);
-        let params = keys.reduce((acc, key) => {
-            const value = filter[key];
-            if (value) {
-                return `${acc}&${key}=${value}`;
-            }
-            return acc;
-        }, '');
+        let params
+        if (filter) {
+            const keys = Object.keys(filter);
+            params = keys.reduce((acc, key) => {
+                const value = filter[key];
+                if (value) {
+                    return `${acc}&${key}=${value}`;
+                }
+                return acc;
+            }, '');
+        }
         return await axiosClient.get(`/transactions/count?${params}`);
     },
     countTransaction2: (query) => {

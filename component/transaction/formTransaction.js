@@ -168,7 +168,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                     onChange={formik.handleChange}
                                                     value={formik.values.appointment_date}
                                                     className="form-control"
-                                                    required />
+                                                />
                                             </div>
                                         </div>
                                     </div>

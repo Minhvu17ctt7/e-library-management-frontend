@@ -123,7 +123,7 @@ const Transactions = () => {
                         </thead>
                         <tbody>
                             {transactions.map(transaction => (
-                                <tr key={transaction.id} onClick={() => router.push(`/manage/transactions/${transaction.id}`)} style={{ cursor: 'pointer' }}>
+                                <tr key={transaction.id} className={Date.parse(transaction.pay_date) < Date.now() && !transaction.appointment_date ? 'table-danger' : ''} onClick={() => router.push(`/manage/transactions/${transaction.id}`)} style={{ cursor: 'pointer' }}>
                                     <th scope="row">{transaction.id}</th>
                                     <th scope="row">
                                         {transaction.member.name}
