@@ -1,11 +1,15 @@
-import Head from "next/head";
+import React, { useState, useEffect } from 'react';
 import Layout from "component/Layout/Layout";
-import Cookies from 'js-cookie'
+import { useRouter } from "next/router";
 
 export default function Mange() {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/manage/books")
+  })
   return (
     <>
-      <Layout>This is Admin page</Layout>
+      <Layout></Layout>
     </>
   );
 }

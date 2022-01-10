@@ -21,6 +21,7 @@ const Sidebar = () => {
                         </a>
                     </Link>
                 </li>
+            <ul className="nav nav-pills flex-column mb-auto">
                 <li>
                     <Link href="/manage/books">
                         <a className={routerPath === "books" ? "nav-link link-dark active" : "nav-link link-dark"}>
@@ -39,6 +40,11 @@ const Sidebar = () => {
                     <a className="nav-link link-dark">
                     <i class="bi bi-newspaper"></i>Transaction
                     </a>
+                    <Link href="/manage/transactions">
+                        <a className={routerPath === "transactions" ? "nav-link link-dark active" : "nav-link link-dark"}>
+                            Transaction
+                        </a>
+                    </Link>
                 </li>
                 <li>
                     <a className="nav-link link-dark">

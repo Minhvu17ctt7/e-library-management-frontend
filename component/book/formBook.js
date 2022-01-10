@@ -38,7 +38,6 @@ const FormBook = ({ authors, categories, providers, book }) => {
     const [srcImage, setSrcImage] = useState();
     //Lưu file để create
     const [fileImage, setFileImage] = useState();
-    console.log("book...", book)
 
     //Cái formik này để quản lý value input dễ hơn state
     const formik = useFormik({
