@@ -89,6 +89,7 @@ const BookDetail = () => {
                         </div>
 
                     </div>
+                    <button type="button" className="btn btn-secondary m-2 button-style button-17 float-right" onClick={() => router.push("/manage/books")}>Cancel</button>
 
                 </section>
 

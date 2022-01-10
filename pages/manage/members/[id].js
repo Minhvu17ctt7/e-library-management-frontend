@@ -45,6 +45,8 @@ const MemberDetail = () => {
                         <i>{member.description}</i>
                     </Col>
                 </Row>
+                <button type="button" className="btn btn-secondary m-2 button-style button-17 float-right" onClick={() => router.push("/manage/members")}>Cancel</button>
+
             </Fragment>)}
         </Layout>
     )

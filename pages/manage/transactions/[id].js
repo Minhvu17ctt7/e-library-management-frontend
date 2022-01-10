@@ -31,8 +31,9 @@ const TransactionDetail = () => {
 
                 <section>
 
-                    
-                    <div className="card rounded mb-4">
+                <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Transaction Details</h1>
+              
+                    <div className="card rounded mb-4 table table-container table-bordered">
 
                         <div className="row">
                             <h3 className="font-weight-normal mb-3" data-mdb-toggle="animation"
@@ -73,29 +74,34 @@ const TransactionDetail = () => {
                                 </div>
 
                             ))} */}
-                            <Table bordered hover>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Member</th>
-                                        <th scope="col">Borrowed date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {(transaction.transaction_details).map(detail => (
-                                        <tr key={detail.id} >
-                                            <td>{detail.book_name}</td>
-                                            <td>{detail.quantity}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
+
 
 
                         </div>
 
                     </div>
 
+                    <Table className="table table-container table-bordered" striped bordered hover>
+                                <thead className="td-style gradient-card bigger-card">
+                                    <tr className="td-style">
+                                        <th className="td-style" scope="col">Member</th>
+                                        <th className="td-style" scope="col">Borrowed date</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bigger-card" >
+                                    {(transaction.transaction_details).map(detail => (
+                                        <tr className="td-style" key={detail.id} >
+                                            <td className="td-style" >{detail.book_name}</td>
+                                            <td className="td-style">{detail.quantity}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                            <button type="button" className="float-right btn btn-secondary m-2 button-style button-17" onClick={() => router.push("/manage/transactions")}>Cancel</button>
+
                 </section>
+                
+
 
             </div>}
         </Layout></Fragment>

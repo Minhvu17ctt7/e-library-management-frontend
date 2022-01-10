@@ -132,7 +132,7 @@ const FormMember = ({ member }) => {
             <div className="row">
                         <div className="col-md-8 mb-4">
                             <div className="card mb-4">
-                                <div className="card-header py-3">
+                                <div className="card-header py-3 gradient-card bigger-card">
                                     <h5 className="mb-0">Infomation Member</h5>
                                 </div>
                                 <div className="card-body">
@@ -211,11 +211,11 @@ const FormMember = ({ member }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-12 mb-4 text-center">
-                            <Button type="submit" class="btn btn-primary m-2" disabled={loading}>
+                        <div className="col-md-12 mb-4 button-container">
+                            <Button type="submit" class="btn btn-primary m-2 button-17 button-style button-confirm" disabled={loading}>
                                 {member ? "Update" : "Create"}
                             </Button>
-                            <button type="button" class="btn btn-secondary m-2" onClick={() => router.push("/manage/members")}>Cancel</button>
+                            <button type="button" class="btn btn-secondary m-2 button-17 button-style" onClick={() => router.push("/manage/members")}>Cancel</button>
                         </div>
                     </div>
             </form>
