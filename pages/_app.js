@@ -4,6 +4,7 @@ import "styles/globals.css"
 import { parseCookies } from 'nookies'
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import "styles/transaction.scss";
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />

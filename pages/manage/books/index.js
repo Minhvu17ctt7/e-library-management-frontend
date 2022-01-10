@@ -102,7 +102,7 @@ const Books = () => {
                 <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Books</h1>
                 <div className="d-flex justify-content-end mb-3">
                     <Link href="/manage/books/create">
-                        <Button className="btn btn-primary">Create book</Button>
+                        <Button className="btn btn-primary button-17">Create book</Button>
                     </Link>
                 </div>
                 <BookSearchForm
@@ -110,39 +110,42 @@ const Books = () => {
                 />
                 {books && books.length <= 0 && !loading && <NoData />}
                 {books && !!books.length && (
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Author</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Remain</th>
-                                <th scope="col">Actions</th>
+                    <Table className="table table-container table-bordered" striped bordered hover>
+                        <thead className="td-style gradient-card bigger-card">
+                            <tr className="td-style">
+                                <th className="td-style" scope="col">ID</th>
+                                <th className="td-style" scope="col">Image</th>
+                                <th className="td-style" scope="col">Name</th>
+                                <th className="td-style" scope="col">Author</th>
+                                <th className="td-style" scope="col">Category</th>
+                                <th className="td-style" scope="col">Remain</th>
+                                <th className="td-style" scope="col">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="bigger-card">
                             {books.map(book => (
-                                <tr key={book.id} onClick={() => router.push(`/manage/books/${book.id}`)} style={{ cursor: 'pointer' }}>
-                                    <th scope="row">{book.id}</th>
-                                    <th scope="row">
+                                <tr className="td-style" key={book.id} onClick={() => router.push(`/manage/books/${book.id}`)} style={{ cursor: 'pointer' }}>
+                                    <th className="td-style" scope="row">{book.id}</th>
+                                    <th className="td-style" scope="row">
                                         <img src={book.photo ? `${BASE_URL}${book.photo.url}` : "/image/thumbnail.png"} className="img-thumbnail rounded-3"
                                             style={{ width: "100px" }} alt={book.name} />
                                     </th>
-                                    <td>{book.name}</td>
-                                    <td>{book.author.name}</td>
-                                    <td>{book.category.name}</td>
-                                    <td>{book.remain}</td>
-                                    <td onClick={(e) => e.stopPropagation()}>
-                                        <Link href={`/manage/books/update/${book.id}`}>
-                                            <button type="button" className="btn btn-sm px-3 btn-warning">
-                                                <i className="bi bi-pencil-square"></i>
+                                    <td className="td-style" >{book.name}</td>
+                                    <td className="td-style" >{book.author.name}</td>
+                                    <td className="td-style" >{book.category.name}</td>
+                                    <td className="td-style" >{book.remain}</td>
+                                    <td className="td-style chart-button" onClick={(e) => e.stopPropagation()}>
+                                        
+                                            <Link href={`/manage/books/update/${book.id}`}>
+                                                <button type="button" className="btn btn-sm px-3 btn-warning button-23">
+                                                    <i className="bi bi-pencil-square"></i>
+                                                </button>
+                                            </Link>
+                                            <button type="button" className="btn btn-danger btn-sm px-3 m-2 button-23" onClick={() => handleDeleteBook(book.id)}>
+                                                <i className="bi bi-trash"></i>
                                             </button>
-                                        </Link>
-                                        <button type="button" className="btn btn-danger btn-sm px-3 m-2" onClick={() => handleDeleteBook(book.id)}>
-                                            <i className="bi bi-trash"></i>
-                                        </button></td>
+                                        
+                                    </td>
 
                                 </tr>
                             ))}

@@ -16,7 +16,7 @@
 }
 
 .contentContainer {
-  padding-top: 20px;
+  padding-top: 40px;
 }
 
 .sidebarLogo {
@@ -84,7 +84,7 @@
   text-transform: uppercase;
   background-color: #151515;
   text-align: center;
-  padding: 15px 0 15px 0;
+  padding: 30px 0 20px 0;
 }
 
 .sidebarNavigation .header::before {

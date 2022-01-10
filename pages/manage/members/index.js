@@ -68,9 +68,9 @@ const Members = () => {
     return (
         <Layout>
             <Row>
-                <Col className="d-flex flex-row-reverse">
+                <Col style={{margintop:"30%"}} className="d-flex flex-row-reverse">
                     <Link href="/manage/members/create">
-                        <Button variant="primary"  size='lg'>Create new member</Button>
+                        <Button className={"button-17"} variant="primary"  size='lg'>Create new member</Button>
                     </Link>
                 </Col>
             </Row>
@@ -78,7 +78,7 @@ const Members = () => {
             <MemberSearchForm
               setSearchFilter={setFilter}
             />
-            <label style={{marginBottom: "10px"}}>
+            <label className="button-17" style={{marginBottom: "10px", padding: "10px", borderRadius:"10px"}}>
             Items per page: 
             <select value={sizePage} onChange={(e) => {
                 setSizePage(e.target.value);
@@ -91,30 +91,30 @@ const Members = () => {
                 </select>
             </label>
             {members && (
-              <Table striped bordered hover>
-                <thead className="thead-light">
-                    <tr>
-                        <th scope="col">CODE</th>
-                        <th scope="col">NAME</th>
-                        <th scope="col">EMAIL</th>
-                        <th scope="col">ADDRESS</th>
-                        <th scope="col">PHONE</th>
-                        <th></th>
+              <Table className="table table-container table-bordered" striped bordered hover>
+                <thead className="td-style gradient-card bigger-card">
+                    <tr className="td-style">
+                        <th className="td-style" scope="col">CODE</th>
+                        <th className="td-style" scope="col">NAME</th>
+                        <th className="td-style" scope="col">EMAIL</th>
+                        <th className="td-style" scope="col">ADDRESS</th>
+                        <th className="td-style" scope="col">PHONE</th>
+                        <th className="td-style"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="bigger-card">
                     {members.map(member => (
-                        <tr key={member.id} onClick={() => router.push(`/manage/members/${member.id}`)}  style={{ cursor: 'pointer' }}>
-                            <th scope="row">{member.code}</th>
-                            <td>{member.name}</td>
-                            <td>{member.email}</td>
-                            <td>{member.address}</td>
-                            <td>{member.phone}</td>
-                            <td onClick={(e) => e.stopPropagation()}>
+                        <tr className="td-style" key={member.id} onClick={() => router.push(`/manage/members/${member.id}`)}  style={{ cursor: 'pointer' }}>
+                            <th className="td-style" scope="row">{member.code}</th>
+                            <td className="td-style">{member.name}</td>
+                            <td className="td-style">{member.email}</td>
+                            <td className="td-style">{member.address}</td>
+                            <td className="td-style">{member.phone}</td>
+                            <td className="chart-button" onClick={(e) => e.stopPropagation()}>
                                 <Link href={`/manage/members/update/${member.id}`}>
-                                    <Button variant="outline-success">Edit</Button>
+                                    <Button role ="button" className="button-23 ">Edit</Button>
                                 </Link>
-                                {' '}<Button variant="outline-danger" onClick={() => handleDeleteMember(member.id)}>Delete</Button>
+                                {' '}<Button variant="outline-danger" role="button" className="button-23 button-confirm" onClick={() => handleDeleteMember(member.id)}>Delete</Button>
                             </td>
 
                         </tr>

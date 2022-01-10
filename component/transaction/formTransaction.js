@@ -115,9 +115,9 @@ const FormTransaction = ({ members, books, transaction }) => {
                 <form onSubmit={formik.handleSubmit}>
                     <div className="row">
                         <div className="col-md-12 mb-4">
-                            <div className="card mb-4">
-                                <div className="card-header py-3">
-                                    <h5 className="mb-0">Infomation transaction</h5>
+                            <div className="card mb-4 bigger-card">
+                                <div >
+                                    <h5 className="mb-0 gradient-card">Infomation Transaction</h5>
                                 </div>
                                 <div className="card-body">
 
@@ -128,7 +128,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                 <label className="form-label">Name member</label>
                                                 <select name="member" onChange={formik.handleChange}
                                                     defaultValue={formik.values.member}
-                                                    className="form-control"
+                                                    className="form-control hoverable"
                                                 >
                                                     <option>Choose member</option>
                                                     {
@@ -145,7 +145,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                 <input type="date" name="borrow_date" placeholder="borrow_date"
                                                     onChange={formik.handleChange}
                                                     value={formik.values.borrow_date}
-                                                    className="form-control"
+                                                    className="form-control hoverable"
                                                     required />
                                             </div>
                                         </div>
@@ -157,13 +157,13 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                 <input type="date" name="pay_date" placeholder="pay_date"
                                                     onChange={formik.handleChange}
                                                     value={formik.values.pay_date}
-                                                    className="form-control"
+                                                    className="form-control hoverable"
                                                     required />
                                             </div>
                                         </div>
                                         <div className="col-6">
                                             <div className="form-outline">
-                                                <label className="form-label">Appointment date</label>
+                                                <label className="form-label ">Appointment date</label>
                                                 <input type="date" name="appointment_date" placeholder="appointment_date"
                                                     onChange={formik.handleChange}
                                                     value={formik.values.appointment_date}
@@ -178,18 +178,19 @@ const FormTransaction = ({ members, books, transaction }) => {
                             </div>
                         </div>
                         <div className="col-md-12 mb-4">
-                            <div className="card mb-4">
-                                <div className="card-header py-3">
-                                    <h5 className="mb-0">Sách mượn</h5>
+                            <div className="card mb-4 bigger-card">
+                                <div>
+                                    <h5 className="mb-0 gradient-card">Sách mượn</h5>
                                 </div>
-                                <div className="card-body">
+                                <div className="card-body borrow-container">
                                     <div className="row mb-4">
                                         <div className="col-6">
-                                            <Button type="button" onClick={hanldeAddBook} className="btn btn-primary m-2" >
+                                            <Button type="button" role="button" onClick={hanldeAddBook} className="button-style" >
                                                 Thêm sách
                                             </Button>
                                         </div>
                                     </div>
+                                    
                                     {
                                         formik.values.transactionDetails && formik.values.transactionDetails.map((transactionDetail, index) => (
 
@@ -201,10 +202,10 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                     required />
                                                 <div className="col-6">
                                                     <div className="form-outline">
-                                                        <label className="form-label">Book</label>
+                                                        <label className="form-label ">Book</label>
                                                         <select name="transaction_details.book" onChange={(event) => handleChangeSelect(event, index)}
                                                             value={transactionDetail.book}
-                                                            className="form-control"
+                                                            className="form-control hoverable"
                                                         >
                                                             <option>Choose book</option>
                                                             {
@@ -221,7 +222,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                         <input type="number" name="transaction_details.quantity" placeholder="Quantity"
                                                             value={transactionDetail?.quantity}
                                                             onChange={(event) => handleChangeQuantity(event, index)}
-                                                            className="form-control"
+                                                            className="form-control hoverable"
                                                             required />
                                                     </div>
                                                 </div>
@@ -234,11 +235,11 @@ const FormTransaction = ({ members, books, transaction }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-12 mb-4 text-center">
-                            <Button type="submit" className="btn btn-primary m-2" disabled={loading}>
+                        <div className="col-md-12 mb-4 button-container">
+                            <Button type="submit" className="btn btn-primary m-2 button-style button-17 button-confirm" disabled={loading}>
                                 {transaction ? "Update" : "Create"}
                             </Button>
-                            <button type="button" className="btn btn-secondary m-2" onClick={() => router.push("/manage/transactions")}>Cancel</button>
+                            <button type="button" className="btn btn-secondary m-2 button-style button-17" onClick={() => router.push("/manage/transactions")}>Cancel</button>
                         </div>
                     </div>
                 </form>

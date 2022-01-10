@@ -20,9 +20,9 @@ const DeleteBook = ({ showModalDelete, handleCloseModalDelete, idBook, selectDoc
                 <Button variant="danger" onClick={handleOnDelete}>
                     Delete
                 </Button>
-                <Button variant="secondary" onClick={handleCloseModalDelete}>
+                <button variant="secondary" onClick={handleCloseModalDelete}>
                     Close
-                </Button>
+                </button>
             </Modal.Footer>
         </Modal>
     )

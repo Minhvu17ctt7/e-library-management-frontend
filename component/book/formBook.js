@@ -95,10 +95,10 @@ const FormBook = ({ authors, categories, providers, book }) => {
                     <div className="row">
                         <div className="col-md-8 mb-4">
                             <div className="card mb-4">
-                                <div className="card-header py-3">
-                                    <h5 className="mb-0">Information book</h5>
+                                <div className="">
+                                    <h5 className="mb-0 bigger-card gradient-card">Information book</h5>
                                 </div>
-                                <div className="card-body">
+                                <div className="card-body bigger-card">
 
                                     {/* <!-- 2 column grid layout with text inputs for the first and last names --> */}
                                     <div className="row mb-4">
@@ -266,11 +266,11 @@ const FormBook = ({ authors, categories, providers, book }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-12 mb-4 text-center">
-                            <Button type="submit" class="btn btn-primary m-2" disabled={loading}>
+                        <div className="col-md-12 mb-4 button-container">
+                            <Button type="button" className="btn btn-primary m-2 button-style button-17 button-confirm" disabled={loading}>
                                 {book ? "Update" : "Create"}
                             </Button>
-                            <button type="button" className="btn btn-secondary m-2" onClick={() => router.push("/manage/books")}>Cancel</button>
+                            <button type="button" className="btn btn-primary m-2 button-style button-17" onClick={() => router.push("/manage/books")}>Cancel</button>
                         </div>
                     </div>
                 </form>

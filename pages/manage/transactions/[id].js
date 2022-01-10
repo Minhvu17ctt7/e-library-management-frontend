@@ -31,6 +31,7 @@ const TransactionDetail = () => {
 
                 <section>
 
+                    
                     <div className="card rounded mb-4">
 
                         <div className="row">
