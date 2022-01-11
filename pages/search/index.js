@@ -95,7 +95,7 @@ export default function Search() {
                                             className="w-50"
                                         />
                                     </div>
-                                    <div className="card-body">
+                                    <div className="card-body d-flex flex-column justify-content-end">
                                         <h5 className="card-title mb-3">{book.name}</h5>
                                         <p>Remain: {book.remain}</p>
                                         <button type="button" className="btn btn-outline-primary" data-mdb-ripple-color="dark"
