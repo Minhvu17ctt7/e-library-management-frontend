@@ -19,7 +19,7 @@ const DeleteMember = ({ showModalDelete, handleCloseModalDelete, idMember }) => 
                 <Button variant="danger" onClick={handleOnDelete}>
                     Delete
                 </Button>
-                <Button variant="secondary" onClick={handleCloseModalDelete}>
+                <Button onClick={handleCloseModalDelete}>
                     Close
                 </Button>
             </Modal.Footer>

@@ -20,7 +20,7 @@ const DeleteTransaction = ({ showModalDelete, handleCloseModalDelete, idTransact
                 <Button variant="danger" onClick={handleOnDelete}>
                     Delete
                 </Button>
-                <Button variant="secondary" onClick={handleCloseModalDelete}>
+                <Button onClick={handleCloseModalDelete}>
                     Close
                 </Button>
             </Modal.Footer>

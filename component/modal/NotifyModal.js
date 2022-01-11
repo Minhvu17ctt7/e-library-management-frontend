@@ -9,7 +9,7 @@ const NotifyModal = ({ showModal, closeModal, content }) => {
             </Modal.Header>
             <Modal.Body>{content.message}</Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={closeModal}>
+                <Button onClick={closeModal}>
                     Close
                 </Button>
             </Modal.Footer>
