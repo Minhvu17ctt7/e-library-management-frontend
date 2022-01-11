@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import Cookies from 'js-cookie'
 import Loading from 'component/Loading/Loading'
 import * as Yup from 'yup';
+import CurrencyInput from 'react-currency-input-field';
 
 const BookSchema = Yup.object({
     name: Yup.string()
@@ -38,6 +39,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
     const [srcImage, setSrcImage] = useState();
     //Lưu file để create
     const [fileImage, setFileImage] = useState();
+    const [onChange, setOnChange] = useState(true);
 
     //Cái formik này để quản lý value input dễ hơn state
     const formik = useFormik({
@@ -64,6 +66,12 @@ const FormBook = ({ authors, categories, providers, book }) => {
             router.replace("/manage/books");
         },
     });
+
+    const onChangePrice = (value) => {
+        console.log("value...", value)
+        formik.values.price = value;
+        setOnChange(statePre => !statePre);
+    }
 
     //khi input file change thì gọi để show image preview
     const handleChangePhoto = (e) => {
@@ -137,6 +145,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
                                         <div className="col">
                                             <div className="form-outline">
                                                 <label className="form-label">Quantity</label>
+
                                                 <input type="number" step='1' name="remain"
                                                     onChange={formik.handleChange}
                                                     value={formik.values.remain}
@@ -153,11 +162,18 @@ const FormBook = ({ authors, categories, providers, book }) => {
                                         <div className="col">
                                             <div className="form-outline">
                                                 <label className="form-label">Price</label>
-                                                <input type="number" step='1' name="price"
+                                                <CurrencyInput
+                                                    name="price"
+                                                    placeholder="Price"
+                                                    className="form-control"
+                                                    onValueChange={(value) => onChangePrice(value)}
+                                                    value={formik.values.price}
+                                                />
+                                                {/* <input type="number" step='1' name="price"
                                                     onChange={formik.handleChange}
                                                     value={formik.values.price}
                                                     className="form-control"
-                                                    placeholder="Price" />
+                                                    placeholder="Price" /> */}
                                                 {formik.errors.price && (<p style={{
                                                     color: "red",
                                                     marginLeft: "10px"
@@ -267,7 +283,7 @@ const FormBook = ({ authors, categories, providers, book }) => {
                             </div>
                         </div>
                         <div className="col-md-12 mb-4 button-container">
-                            <Button type="button" className="btn btn-primary m-2 button-style button-17 button-confirm" disabled={loading}>
+                            <Button type="submit" className="btn btn-primary m-2 button-style button-17 button-confirm" disabled={loading}>
                                 {book ? "Update" : "Create"}
                             </Button>
                             <button type="button" className="btn btn-primary m-2 button-style button-17" onClick={() => router.push("/manage/books")}>Cancel</button>

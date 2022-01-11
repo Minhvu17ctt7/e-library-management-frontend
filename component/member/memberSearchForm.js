@@ -4,7 +4,7 @@ import { Row, Col, Button, Form } from 'react-bootstrap';
 const MemberSearchForm = ({ setSearchFilter }) => {
   const [filter, setFilter] = useState(null);
   const updateFilter = (key, value) => {
-    setFilter({...filter, [key]: value});
+    setFilter({ ...filter, [key]: value });
   };
   const onClear = () => {
     setFilter(null);
@@ -64,7 +64,7 @@ const MemberSearchForm = ({ setSearchFilter }) => {
         </Col>
         <Col>
           <Button variant="outline-success" className="mx-2" onClick={onClear}>Clear</Button>
-          <Button variant="success" onClick={onSubmit}>Submit</Button>
+          <Button variant="success" onClick={onSubmit}>Search</Button>
         </Col>
       </Row>
     </div>

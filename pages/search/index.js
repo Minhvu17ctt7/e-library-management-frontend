@@ -9,7 +9,7 @@ import { Button, Form } from "react-bootstrap";
 import NoData from "component/NoData";
 
 export default function Search() {
-    const limit = 4;
+    const limit = 8;
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [books, setBooks] = useState();
@@ -71,12 +71,14 @@ export default function Search() {
             <main style={{ minHeight: '95vh', marginTop: '80px' }}>
                 <Form className="d-inline" onSubmit={handleSearch}>
                     <Form.Group className="w-25 mx-5 my-3">
-                        <Form.Label>Tra cứu sách</Form.Label>
-                        <Form.Control type="text" placeholder="Nhập tên sách" onChange={handleChangeSearch} />
+                        <Form.Label style={{ opacity: '0.9' }}>Tra cứu sách</Form.Label>
+                        <div style={{ display: 'flex' }}>
+                            <Form.Control type="text" placeholder="Nhập tên sách" onChange={handleChangeSearch} />
+                            <Button className="mx-2" variant="primary" type="submit">
+                                Search
+                            </Button>
+                        </div>
                     </Form.Group>
-                    <Button className="mx-5" variant="primary" type="submit">
-                        Search
-                    </Button>
                 </Form>
                 {books && books.length <= 0 && !loading && <NoData />}
                 {books && <section>

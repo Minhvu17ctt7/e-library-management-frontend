@@ -65,7 +65,7 @@ const TransactionSearchForm = ({ setSearchFilter }) => {
       </Col>
       <Col>
         <Button variant="outline-success" className="mx-2" onClick={onClear}>Clear</Button>
-        <Button variant="success" onClick={onSubmit}>Submit</Button>
+        <Button variant="success" onClick={onSubmit}>Search</Button>
       </Col>
     </Row>
   );

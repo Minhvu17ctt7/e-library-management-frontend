@@ -179,9 +179,8 @@ const Transactions = () => {
                     showModal={showModalNotify}
                     closeModal={handleCloseModalNotify}
                     content={{
-                        title: "Can't delete transaction",
-                        message: `Transaction id: ${currentTransaction} has transaction.
-                     Please delete transaction before`
+                        title: "Delete transaction",
+                        message: `Can't delete Transaction id: ${currentTransaction}.`
                     }}
                 />
             </Layout >

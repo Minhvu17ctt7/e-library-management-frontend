@@ -6,6 +6,7 @@ import Layout from 'component/Layout/Layout'
 import ModalDeleteMember from 'component/modal/DeleteMember'
 import { Form, Row, Col, Button, Table } from 'react-bootstrap'
 import MemberSearchForm from 'component/member/memberSearchForm'
+import Loading from 'component/Loading/Loading'
 
 const initFilterState = {
     'name_contains': null,
@@ -24,18 +25,21 @@ const Members = () => {
     const [sizePage, setSizePage] = useState(3);
     const page = +router.query.page || 1;
     const start = +page === 1 ? 0 : (+page - 1) * sizePage;
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         handleClickPagination(1);
     }, [filter]);
     useEffect(() => {
         (async () => {
-            const members = await memberApi.getMembers(sizePage, {"_start": start, _sort: 'id:ASC', ...filter });
+            setLoading(true);
+            const members = await memberApi.getMembers(sizePage, { "_start": start, _sort: 'id:ASC', ...filter });
             setMembers(members);
             //Tính tổng page
             const numberOfMovies = await memberApi.countMember(filter);
             const totalPage = Math.ceil(numberOfMovies / sizePage);
             setTotalPage(totalPage);
+            setLoading(false);
         })()
     }, [page, filter, sizePage])
 
@@ -66,89 +70,92 @@ const Members = () => {
     }
 
     return (
-        <Layout>
-            <Row>
-                <Col style={{margintop:"30%"}} className="d-flex flex-row-reverse">
-                    <Link href="/manage/members/create">
-                        <Button className={"button-17"} variant="primary"  size='lg'>Create new member</Button>
-                    </Link>
-                </Col>
-            </Row>
-            <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Members</h1>
-            <MemberSearchForm
-              setSearchFilter={setFilter}
-            />
-            <label className="button-17" style={{marginBottom: "10px", padding: "10px", borderRadius:"10px"}}>
-            Items per page: 
-            <select value={sizePage} onChange={(e) => {
-                setSizePage(e.target.value);
-                console.log(e.target.value);
-                }} >
-                    <option value="3">3</option>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="30">30</option>
-                </select>
-            </label>
-            {members && (
-              <Table className="table table-container table-bordered" striped bordered hover>
-                <thead className="td-style gradient-card bigger-card">
-                    <tr className="td-style">
-                        <th className="td-style" scope="col">CODE</th>
-                        <th className="td-style" scope="col">NAME</th>
-                        <th className="td-style" scope="col">EMAIL</th>
-                        <th className="td-style" scope="col">ADDRESS</th>
-                        <th className="td-style" scope="col">PHONE</th>
-                        <th className="td-style"></th>
-                    </tr>
-                </thead>
-                <tbody className="bigger-card">
-                    {members.map(member => (
-                        <tr className="td-style" key={member.id} onClick={() => router.push(`/manage/members/${member.id}`)}  style={{ cursor: 'pointer' }}>
-                            <th className="td-style" scope="row">{member.code}</th>
-                            <td className="td-style">{member.name}</td>
-                            <td className="td-style">{member.email}</td>
-                            <td className="td-style">{member.address}</td>
-                            <td className="td-style">{member.phone}</td>
-                            <td className="chart-button" onClick={(e) => e.stopPropagation()}>
-                                <Link href={`/manage/members/update/${member.id}`}>
-                                    <Button role ="button" className="button-23 ">Edit</Button>
-                                </Link>
-                                {' '}<Button variant="outline-danger" role="button" className="button-23 button-confirm" onClick={() => handleDeleteMember(member.id)}>Delete</Button>
-                            </td>
+        <>
+            {loading && <Loading />}
+            <Layout>
+                <Row>
+                    <Col style={{ margintop: "30%" }} className="d-flex flex-row-reverse">
+                        <Link href="/manage/members/create">
+                            <Button className={"button-17"} variant="primary" size='lg'>Create new member</Button>
+                        </Link>
+                    </Col>
+                </Row>
+                <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Members</h1>
+                <MemberSearchForm
+                    setSearchFilter={setFilter}
+                />
+                <label className="button-17" style={{ marginBottom: "10px", padding: "10px", borderRadius: "10px" }}>
+                    Items per page:
+                    <select value={sizePage} onChange={(e) => {
+                        setSizePage(e.target.value);
+                        console.log(e.target.value);
+                    }} >
+                        <option value="3">3</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="30">30</option>
+                    </select>
+                </label>
+                {members && (
+                    <Table className="table table-container table-bordered" striped bordered hover>
+                        <thead className="td-style gradient-card bigger-card">
+                            <tr className="td-style">
+                                <th className="td-style" scope="col">CODE</th>
+                                <th className="td-style" scope="col">NAME</th>
+                                <th className="td-style" scope="col">EMAIL</th>
+                                <th className="td-style" scope="col">ADDRESS</th>
+                                <th className="td-style" scope="col">PHONE</th>
+                                <th className="td-style"></th>
+                            </tr>
+                        </thead>
+                        <tbody className="bigger-card">
+                            {members.map(member => (
+                                <tr className="td-style" key={member.id} onClick={() => router.push(`/manage/members/${member.id}`)} style={{ cursor: 'pointer' }}>
+                                    <th className="td-style" scope="row">{member.code}</th>
+                                    <td className="td-style">{member.name}</td>
+                                    <td className="td-style">{member.email}</td>
+                                    <td className="td-style">{member.address}</td>
+                                    <td className="td-style">{member.phone}</td>
+                                    <td className="chart-button" onClick={(e) => e.stopPropagation()}>
+                                        <Link href={`/manage/members/update/${member.id}`}>
+                                            <Button role="button" className="button-23 ">Edit</Button>
+                                        </Link>
+                                        {' '}<Button variant="outline-danger" role="button" className="button-23 button-confirm" onClick={() => handleDeleteMember(member.id)}>Delete</Button>
+                                    </td>
 
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>)}
-            {members && (
-            <nav aria-label="Page navigation"  className="d-flex justify-content-center">
-                <ul className="pagination">
-                    <li className={page <= 1 ? 'page-item disabled' : 'page-item'}
-                        onClick={() => handleClickPagination(page - 1)}
-                    >
-                        <a className="page-link" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    {
-                        itemPagination()
-                    }
-                    <li className={page >= totalPage ? 'page-item disabled' : 'page-item'}
-                        onClick={() => handleClickPagination(page + 1)}
-                    >
-                        <a className="page-link" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>)}
-            <ModalDeleteMember
-                showModalDelete={showModalDelete}
-                handleCloseModalDelete={handleCloseModalDelete}
-                idMember={currentMember}
-            />
-        </Layout >
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>)}
+                {members && (
+                    <nav aria-label="Page navigation" className="d-flex justify-content-center">
+                        <ul className="pagination">
+                            <li className={page <= 1 ? 'page-item disabled' : 'page-item'}
+                                onClick={() => handleClickPagination(page - 1)}
+                            >
+                                <a className="page-link" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {
+                                itemPagination()
+                            }
+                            <li className={page >= totalPage ? 'page-item disabled' : 'page-item'}
+                                onClick={() => handleClickPagination(page + 1)}
+                            >
+                                <a className="page-link" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>)}
+                <ModalDeleteMember
+                    showModalDelete={showModalDelete}
+                    handleCloseModalDelete={handleCloseModalDelete}
+                    idMember={currentMember}
+                />
+            </Layout >
+        </>
     )
 }
 

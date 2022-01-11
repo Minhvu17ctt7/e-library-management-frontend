@@ -24,14 +24,14 @@ const Header = () => {
   return (
     <Navbar expand="lg" bg="primary" variant="dark" style={{ position: 'fixed', zIndex: '100', width: '100%', top: 0 }}>
       <Container>
-        <Navbar.Brand href={isLoggedIn ? "/manage/books" : "/"}><h2 style={{ marginBottom: "0" }}><i style={{ marginRight: '10px' }} className="bi bi-journal-bookmark-fill"></i>E-LIBRARY-MANAGEMENT</h2></Navbar.Brand>
+        <Navbar.Brand href={isLoggedIn ? "/manage/books" : "/"}><h4 style={{ marginBottom: "0" }}><i style={{ marginRight: '10px' }} className="bi bi-journal-bookmark-fill"></i>E-LIBRARY-MANAGEMENT</h4></Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Nav>
             {!isLoggedIn &&
-              (<Nav.Link href="/login"><h4 style={{ marginBottom: "0" }}>Login</h4></Nav.Link>)}
+              (<Nav.Link href="/login"><h5 style={{ marginBottom: "0" }}>Login</h5></Nav.Link>)}
             {isLoggedIn &&
-              (<Nav.Link onClick={handleLogout}><h4 style={{ marginBottom: "0" }}>Logout</h4></Nav.Link>)}
+              (<Nav.Link onClick={handleLogout}><h5 style={{ marginBottom: "0" }}>Logout</h5></Nav.Link>)}
           </Nav>
         </Navbar.Collapse>
       </Container>

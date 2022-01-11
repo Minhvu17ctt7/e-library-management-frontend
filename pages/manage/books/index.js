@@ -99,12 +99,13 @@ const Books = () => {
         <Fragment>
             {loading && <Loading />}
             <Layout>
-                <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Books</h1>
                 <div className="d-flex justify-content-end mb-3">
                     <Link href="/manage/books/create">
                         <Button className="btn btn-primary button-17">Create book</Button>
                     </Link>
                 </div>
+                <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">Books</h1>
+
                 <BookSearchForm
                     setSearchFilter={setFilter}
                 />
@@ -135,16 +136,16 @@ const Books = () => {
                                     <td className="td-style" >{book.category.name}</td>
                                     <td className="td-style" >{book.remain}</td>
                                     <td className="td-style chart-button" onClick={(e) => e.stopPropagation()}>
-                                        
-                                            <Link href={`/manage/books/update/${book.id}`}>
-                                                <button type="button" className="btn btn-sm px-3 btn-warning button-23">
-                                                    <i className="bi bi-pencil-square"></i>
-                                                </button>
-                                            </Link>
-                                            <button type="button" className="btn btn-danger btn-sm px-3 m-2 button-23" onClick={() => handleDeleteBook(book.id)}>
-                                                <i className="bi bi-trash"></i>
+
+                                        <Link href={`/manage/books/update/${book.id}`}>
+                                            <button type="button" className="btn btn-sm px-3 btn-warning button-23">
+                                                <i className="bi bi-pencil-square"></i>
                                             </button>
-                                        
+                                        </Link>
+                                        <button type="button" className="btn btn-danger btn-sm px-3 m-2 button-23" onClick={() => handleDeleteBook(book.id)}>
+                                            <i className="bi bi-trash"></i>
+                                        </button>
+
                                     </td>
 
                                 </tr>

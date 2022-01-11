@@ -30,19 +30,19 @@ const FormMember = ({ member }) => {
         },
         validationSchema: Yup.object({
             code: Yup.string()
-              .required("Required!"),
+                .required("Required!"),
             name: Yup.string()
-              .min(8, "Minimum 8 characters")
-              .required("Required!"),
+                .min(8, "Minimum 8 characters")
+                .required("Required!"),
             address: Yup.string()
-              .min(8, "Minimum 8 characters")
-              .required("Required!"),
+                .min(8, "Minimum 8 characters")
+                .required("Required!"),
             email: Yup.string()
-              .email("Invalid email format")
-              .required("Required!"),
+                .email("Invalid email format")
+                .required("Required!"),
             phone: Yup.string().matches(new RegExp('[0-9]{7}'))
-              .required("Required!"),
-          }),
+                .required("Required!"),
+        }),
         //   validate:Yup.object({
         //     code: Yup.string()
         //       .required("Required!"),
@@ -61,12 +61,14 @@ const FormMember = ({ member }) => {
         enableReinitialize: true,
 
         onSubmit: async (values) => {
+            setLoading(true)
             const jwt = Cookies.get("jwt");
             if (member) {
                 await memberApi.updateMember(values, fileImage, member.id, jwt);
             } else {
                 await memberApi.createMember(values, fileImage, jwt);
             }
+            setLoading(false)
             router.replace("/manage/members");
         },
     });
@@ -125,11 +127,11 @@ const FormMember = ({ member }) => {
         <Fragment>
             {loading && <Loading />}
             <Layout>
-            <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">{
-                member ? `Update member id: ${member.id}` : 'Create member'
-            }</h1>
-            <form onSubmit={formik.handleSubmit}>
-            <div className="row">
+                <h1 className="h3 pt-3 pb-2 mb-3 border-bottom">{
+                    member ? `Update member id: ${member.id}` : 'Create member'
+                }</h1>
+                <form onSubmit={formik.handleSubmit}>
+                    <div className="row">
                         <div className="col-md-8 mb-4">
                             <div className="card mb-4">
                                 <div className="card-header py-3 gradient-card bigger-card">
@@ -141,17 +143,17 @@ const FormMember = ({ member }) => {
                                     <div className="row mb-4">
                                         <div className="col">
                                             <div className="form-outline">
-                                                <label className="form-label" for="form7Example1">Code member</label>
+                                                <label className="form-label">Code member</label>
                                                 <input type="text" name="code" onChange={formik.handleChange}
                                                     value={formik.values.code}
                                                     className="form-control" />
                                                 {formik.errors.code ? (<div className={styles.alert}>{formik.errors.code}</div>) : null}
-                                                
+
                                             </div>
                                         </div>
                                         <div className="col">
                                             <div className="form-outline">
-                                                <label className="form-label" for="form7Example1">Name member</label>
+                                                <label className="form-label">Name member</label>
                                                 <input type="text" name="name" onChange={formik.handleChange}
                                                     value={formik.values.name}
                                                     className="form-control" />
@@ -162,7 +164,7 @@ const FormMember = ({ member }) => {
                                     <div className="row mb-4">
                                         <div className="col">
                                             <div className="form-outline">
-                                                <label className="form-label" for="form7Example1">Address</label>
+                                                <label className="form-label">Address</label>
                                                 <input type="text" name="address" onChange={formik.handleChange}
                                                     value={formik.values.address}
                                                     className="form-control" />
@@ -171,7 +173,7 @@ const FormMember = ({ member }) => {
                                         </div>
                                         <div className="col">
                                             <div className="form-outline">
-                                                <label className="form-label" for="form7Example1">Email</label>
+                                                <label className="form-label">Email</label>
                                                 <input type="text" name="email" onChange={formik.handleChange}
                                                     value={formik.values.email}
                                                     className="form-control" />
@@ -182,7 +184,7 @@ const FormMember = ({ member }) => {
                                     <div className="row mb-4">
                                         <div className="col">
                                             <div className="form-outline">
-                                                <label className="form-label" for="form7Example1">Phone</label>
+                                                <label className="form-label">Phone</label>
                                                 <input type="text" name="phone" onChange={formik.handleChange}
                                                     value={formik.values.phone}
                                                     className="form-control" />
@@ -190,10 +192,10 @@ const FormMember = ({ member }) => {
                                             </div>
                                         </div>
                                         <div className="col">
-                                            
+
                                         </div>
                                     </div>
-                                
+
 
                                 </div>
                             </div>
@@ -212,14 +214,14 @@ const FormMember = ({ member }) => {
                             </div>
                         </div>
                         <div className="col-md-12 mb-4 button-container">
-                            <Button type="submit" class="btn btn-primary m-2 button-17 button-style button-confirm" disabled={loading}>
+                            <Button type="submit" className="btn btn-primary m-2 button-style button-17 button-confirm" disabled={loading}>
                                 {member ? "Update" : "Create"}
                             </Button>
-                            <button type="button" class="btn btn-secondary m-2 button-17 button-style" onClick={() => router.push("/manage/members")}>Cancel</button>
+                            <button type="button" className="btn btn-secondary m-2 button-17 button-style" onClick={() => router.push("/manage/members")}>Cancel</button>
                         </div>
                     </div>
-            </form>
-        </Layout>
+                </form>
+            </Layout>
         </Fragment>
     )
 }

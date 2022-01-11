@@ -11,7 +11,7 @@ const MemberDetail = () => {
     useEffect(() => {
         (async () => {
             const id = router.query.id;
-            const member = await memberApi.getMemberById(id); 
+            const member = await memberApi.getMemberById(id);
             setMember(member)
         })()
     }, [router])
@@ -35,16 +35,14 @@ const MemberDetail = () => {
                         <p className="mb-3">Address: {member.address}</p>
                         <br />
                         <p className="mb-3">Phone: {member.phone}</p>
-                        <br />
-                        <p className="mb-3">Page: {member.page}</p>
                     </Col>
                 </Row>
-                <Row>
+                {/* <Row>
                     <Col sm={7}>
                         <h4 clasName="mb-3">Description</h4>
                         <i>{member.description}</i>
                     </Col>
-                </Row>
+                </Row> */}
                 <button type="button" className="btn btn-secondary m-2 button-style button-17 float-right" onClick={() => router.push("/manage/members")}>Cancel</button>
 
             </Fragment>)}

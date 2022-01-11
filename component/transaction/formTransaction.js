@@ -26,7 +26,7 @@ const FormTransaction = ({ members, books, transaction }) => {
             appointment_date: transaction?.appointment_date,
             members: members,
             books: books,
-            transactionDetails: transaction ? transaction.transaction_details : ''
+            transactionDetails: transaction ? transaction.transaction_details : []
         },
         onSubmit: async (values) => {
             const jwt = Cookies.get("jwt");
@@ -72,13 +72,14 @@ const FormTransaction = ({ members, books, transaction }) => {
         },
     });
 
-    const hanldeAddBook = () => {
-        if (typeof formik.values.transactionDetail !== "undefined") {
-            formik.values.transactionDetails.push({ book: '', quantity: '' });
-        }
-        else {
-            formik.values.transactionDetails = [{ book: '', quantity: '' }];
-        }
+    const handleAddBook = () => {
+        formik.values.transactionDetails.push({ book: '', quantity: '' });
+        // if (typeof formik.values.transactionDetail !== "undefined") {
+        //     formik.values.transactionDetails.push({ book: '', quantity: '' });
+        // }
+        // else {
+        //     formik.values.transactionDetails = [{ book: '', quantity: '' }];
+        // }
 
         setOnChange(statePre => !statePre);
     }
@@ -180,17 +181,17 @@ const FormTransaction = ({ members, books, transaction }) => {
                         <div className="col-md-12 mb-4">
                             <div className="card mb-4 bigger-card">
                                 <div>
-                                    <h5 className="mb-0 gradient-card">Sách mượn</h5>
+                                    <h5 className="mb-0 gradient-card">Book</h5>
                                 </div>
                                 <div className="card-body borrow-container">
                                     <div className="row mb-4">
                                         <div className="col-6">
-                                            <Button type="button" role="button" onClick={hanldeAddBook} className="button-style" >
-                                                Thêm sách
+                                            <Button type="button" role="button" onClick={handleAddBook} className="button-style" >
+                                                Add book
                                             </Button>
                                         </div>
                                     </div>
-                                    
+
                                     {
                                         formik.values.transactionDetails && formik.values.transactionDetails.map((transactionDetail, index) => (
 

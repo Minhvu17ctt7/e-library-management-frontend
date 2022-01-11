@@ -19,7 +19,9 @@ const BookDetail = () => {
             setLoading(false)
         })()
     }, [])
-
+    function currencyFormat(num) {
+        return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    }
     return (
         <Fragment>
             {loading && <Loading />}
@@ -76,7 +78,7 @@ const BookDetail = () => {
                                         <p className="text-uppercase mb-2" data-mdb-toggle="animation"
                                             data-mdb-animation-start="onLoad" data-mdb-animation="slide-in-down" data-mdb-animation-duration="1000"><strong>Price</strong></p>
                                         <p className="text-muted mb-4" data-mdb-toggle="animation"
-                                            data-mdb-animation-start="onLoad" data-mdb-animation="slide-in-up" data-mdb-animation-duration="1000">{book.price} VND</p>
+                                            data-mdb-animation-start="onLoad" data-mdb-animation="slide-in-up" data-mdb-animation-duration="1000">{currencyFormat(book.price)} VND</p>
                                     </li>
                                     <li>
                                         <p className="text-uppercase mb-2" data-mdb-toggle="animation"

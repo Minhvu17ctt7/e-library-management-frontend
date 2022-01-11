@@ -72,7 +72,7 @@ const Sidebar = () => {
           <li>
             <Link href="/manage/transactions">
               <a className={routerPath === "transactions" ? styles.active : null}>
-                <i className="bi bi-person"></i>Transactions
+                <i className="bi bi-newspaper"></i>Transactions
               </a>
             </Link>
           </li>
