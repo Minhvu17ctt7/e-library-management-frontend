@@ -129,7 +129,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                 <label className="form-label">Name member</label>
                                                 <select name="member" onChange={formik.handleChange}
                                                     defaultValue={formik.values.member}
-                                                    className="form-control hoverable"
+                                                    className="form-control"
                                                 >
                                                     <option>Choose member</option>
                                                     {
@@ -146,7 +146,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                 <input type="date" name="borrow_date" placeholder="borrow_date"
                                                     onChange={formik.handleChange}
                                                     value={formik.values.borrow_date}
-                                                    className="form-control hoverable"
+                                                    className="form-control"
                                                     required />
                                             </div>
                                         </div>
@@ -158,7 +158,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                 <input type="date" name="pay_date" placeholder="pay_date"
                                                     onChange={formik.handleChange}
                                                     value={formik.values.pay_date}
-                                                    className="form-control hoverable"
+                                                    className="form-control"
                                                     required />
                                             </div>
                                         </div>
@@ -206,7 +206,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                         <label className="form-label ">Book</label>
                                                         <select name="transaction_details.book" onChange={(event) => handleChangeSelect(event, index)}
                                                             value={transactionDetail.book}
-                                                            className="form-control hoverable"
+                                                            className="form-control"
                                                         >
                                                             <option>Choose book</option>
                                                             {
@@ -223,7 +223,7 @@ const FormTransaction = ({ members, books, transaction }) => {
                                                         <input type="number" name="transaction_details.quantity" placeholder="Quantity"
                                                             value={transactionDetail?.quantity}
                                                             onChange={(event) => handleChangeQuantity(event, index)}
-                                                            className="form-control hoverable"
+                                                            className="form-control"
                                                             required />
                                                     </div>
                                                 </div>
